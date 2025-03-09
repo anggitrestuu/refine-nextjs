@@ -6,9 +6,9 @@ import { ThemeFontSizeValue } from '../components/settings/types'
 const getFontSizeScaleFactor = (fontSize: ThemeFontSizeValue): number => {
   switch (fontSize) {
     case 'small':
-      return 0.8;
+      return 0.85;
     case 'large':
-      return 1.2;
+      return 1.15;
     default:
       return 1;
   }
