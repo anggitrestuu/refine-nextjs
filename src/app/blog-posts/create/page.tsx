@@ -1,7 +1,15 @@
 "use client";
 
-import { Autocomplete, Box, MenuItem, Select, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  Box,
+  Button,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 import { Create, useAutocomplete } from "@refinedev/mui";
+import { Create as CreateCustom } from "@components/crud/create";
 import { useForm } from "@refinedev/react-hook-form";
 import { Controller } from "react-hook-form";
 
@@ -20,7 +28,12 @@ export default function BlogPostCreate() {
   });
 
   return (
-    <Create isLoading={formLoading} saveButtonProps={saveButtonProps}>
+    <CreateCustom
+      isLoading={formLoading}
+      saveButtonProps={{
+        ...saveButtonProps,
+      }}
+    >
       <Box
         component="form"
         sx={{ display: "flex", flexDirection: "column" }}
@@ -117,6 +130,6 @@ export default function BlogPostCreate() {
           }}
         />
       </Box>
-    </Create>
+    </CreateCustom>
   );
 }

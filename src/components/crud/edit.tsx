@@ -1,68 +1,167 @@
 import React from "react";
 import {
+  useMutationMode,
   useNavigation,
   useTranslate,
   useUserFriendlyName,
+  useRefineContext,
+  useToPath,
+  useResource,
   useRouterType,
   useBack,
-  useResource,
+  useGo,
 } from "@refinedev/core";
-import { SaveButton, type SaveButtonProps } from "@refinedev/mui";
+import {
+  DeleteButton,
+  RefreshButton,
+  ListButton,
+  SaveButton,
+  Breadcrumb,
+  type ListButtonProps,
+  type RefreshButtonProps,
+  type DeleteButtonProps,
+  type SaveButtonProps,
+  AutoSaveIndicator,
+} from "@refinedev/mui";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
 import CircularProgress from "@mui/material/CircularProgress";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
 import { alpha } from "@mui/system";
-import type { CreateProps } from "@refinedev/mui";
-
+import type { EditProps } from "@refinedev/mui";
+import { Button } from "@mui/material";
 import CustomBreadcrumbs, {
   CustomBreadcrumbsProps,
 } from "@components/custom-breadcrumbs";
-import { Button } from "@mui/material";
 
 /**
- * `<Create>` provides us a layout to display the page.
- * It does not contain any logic but adds extra functionalities like action buttons and giving titles to the page.
+ * `<Edit>` provides us a layout for displaying the page.
+ * It does not contain any logic but adds extra functionalities like a refresh button.
  *
- * @see {@link https://refine.dev/docs/ui-frameworks/mui/components/basic-views/create} for more details.
+ * @see {@link https://refine.dev/docs/ui-frameworks/mui/components/basic-views/edit} for more details.
  */
 
 type Props = {
   title?: string;
   customBreadcrumbsProps?: CustomBreadcrumbsProps;
-} & CreateProps;
+} & EditProps;
 
-export const Create: React.FC<Props> = ({
+export const Edit: React.FC<Props> = ({
   title,
-  children,
   saveButtonProps: saveButtonPropsFromProps,
+  mutationMode: mutationModeProp,
+  recordItemId,
+  children,
+  deleteButtonProps: deleteButtonPropsFromProps,
+  canDelete,
   resource: resourceFromProps,
   isLoading = false,
   breadcrumb: breadcrumbFromProps,
+  dataProviderName,
   wrapperProps,
+  headerProps,
   contentProps,
+  headerButtonProps,
+  headerButtons,
   footerButtonProps,
   footerButtons,
   goBack: goBackFromProps,
+  autoSaveProps,
   customBreadcrumbsProps,
 }) => {
   const translate = useTranslate();
+  const { options: { breadcrumb: globalBreadcrumb } = {} } = useRefineContext();
+  const { mutationMode: mutationModeContext } = useMutationMode();
+  const mutationMode = mutationModeProp ?? mutationModeContext;
 
   const routerType = useRouterType();
   const back = useBack();
-  const { goBack } = useNavigation();
+  const go = useGo();
+  const { goBack, list: legacyGoList } = useNavigation();
   const getUserFriendlyName = useUserFriendlyName();
 
-  const { resource, action, identifier } = useResource(resourceFromProps);
+  const {
+    resource,
+    action,
+    id: idFromParams,
+    identifier,
+  } = useResource(resourceFromProps);
+
+  const goListPath = useToPath({
+    resource,
+    action: "list",
+  });
+
+  const id = recordItemId ?? idFromParams;
+
+  const breadcrumb =
+    typeof breadcrumbFromProps === "undefined"
+      ? globalBreadcrumb
+      : breadcrumbFromProps;
+
+  const hasList = resource?.list && !recordItemId;
+  const isDeleteButtonVisible =
+    canDelete ??
+    ((resource?.meta?.canDelete ?? resource?.canDelete) ||
+      deleteButtonPropsFromProps);
+
+  const listButtonProps: ListButtonProps | undefined = hasList
+    ? {
+        ...(isLoading ? { disabled: true } : {}),
+        resource: routerType === "legacy" ? resource?.route : identifier,
+      }
+    : undefined;
+
+  const refreshButtonProps: RefreshButtonProps = {
+    ...(isLoading ? { disabled: true } : {}),
+    resource: routerType === "legacy" ? resource?.route : identifier,
+    recordItemId: id,
+    dataProviderName,
+  };
+
+  const defaultHeaderButtons = (
+    <Box display="flex" flexDirection="row" alignItems="center">
+      {autoSaveProps && <AutoSaveIndicator {...autoSaveProps} />}
+      {hasList && <ListButton {...listButtonProps} />}
+      <RefreshButton {...refreshButtonProps} />
+    </Box>
+  );
+
+  const deleteButtonProps: DeleteButtonProps | undefined = isDeleteButtonVisible
+    ? ({
+        ...(isLoading ? { disabled: true } : {}),
+        resource: routerType === "legacy" ? resource?.route : identifier,
+        mutationMode,
+        variant: "outlined",
+        onSuccess: () => {
+          if (routerType === "legacy") {
+            legacyGoList(resource?.route ?? resource?.name ?? "");
+          } else {
+            go({ to: goListPath });
+          }
+        },
+        recordItemId: id,
+        dataProviderName,
+        ...deleteButtonPropsFromProps,
+      } as const)
+    : undefined;
 
   const saveButtonProps: SaveButtonProps = {
     ...(isLoading ? { disabled: true } : {}),
     ...saveButtonPropsFromProps,
   };
 
-  const defaultFooterButtons = <SaveButton {...saveButtonProps} />;
+  const defaultFooterButtons = (
+    <>
+      {isDeleteButtonVisible && <DeleteButton {...deleteButtonProps} />}
+      <SaveButton {...saveButtonProps} />
+    </>
+  );
 
   const getTitle = () => {
     return (
@@ -90,7 +189,7 @@ export const Create: React.FC<Props> = ({
             href: resource?.list?.toString() ?? `/${identifier}`,
           },
           {
-            name: "Create",
+            name: "Edit",
           },
         ]}
         action={
@@ -152,6 +251,7 @@ export const Create: React.FC<Props> = ({
             ? typeof footerButtons === "function"
               ? footerButtons({
                   defaultButtons: defaultFooterButtons,
+                  deleteButtonProps,
                   saveButtonProps,
                 })
               : footerButtons
