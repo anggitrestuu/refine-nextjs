@@ -38,10 +38,8 @@ const SPACING = 2.5;
 export default function SettingsDrawer() {
   const {
     themeMode,
-    themeLayout,
     themeStretch,
     themeContrast,
-    themeDirection,
     themeColorPresets,
     onResetSetting,
   } = useSettingsContext();
@@ -60,10 +58,8 @@ export default function SettingsDrawer() {
 
   const notDefault =
     themeMode !== defaultSettings.themeMode ||
-    themeLayout !== defaultSettings.themeLayout ||
     themeStretch !== defaultSettings.themeStretch ||
     themeContrast !== defaultSettings.themeContrast ||
-    themeDirection !== defaultSettings.themeDirection ||
     themeColorPresets !== defaultSettings.themeColorPresets;
 
   return (

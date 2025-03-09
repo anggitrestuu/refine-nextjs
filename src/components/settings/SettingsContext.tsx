@@ -13,10 +13,8 @@ import { defaultSettings } from "./config-setting";
 import { defaultPreset, getPresets, presetsOption } from "./presets";
 import {
   ThemeModeValue,
-  ThemeLayoutValue,
   ThemeStretchValue,
   ThemeContrastValue,
-  ThemeDirectionValue,
   SettingsContextProps,
   ThemeColorPresetsValue,
 } from "./types";
@@ -28,13 +26,6 @@ const initialState: SettingsContextProps = {
   // Mode
   onToggleMode: () => {},
   onChangeMode: () => {},
-  // Direction
-  onToggleDirection: () => {},
-  onChangeDirection: () => {},
-  onChangeDirectionByLang: () => {},
-  // Layout
-  onToggleLayout: () => {},
-  onChangeLayout: () => {},
   // Contrast
   onToggleContrast: () => {},
   onChangeContrast: () => {},
@@ -69,15 +60,11 @@ type SettingsProviderProps = {
 
 export function SettingsProvider({ children }: SettingsProviderProps) {
   const [themeMode, setThemeMode] = useState(defaultSettings.themeMode);
-  const [themeLayout, setThemeLayout] = useState(defaultSettings.themeLayout);
   const [themeStretch, setThemeStretch] = useState(
     defaultSettings.themeStretch
   );
   const [themeContrast, setThemeContrast] = useState(
     defaultSettings.themeContrast
-  );
-  const [themeDirection, setThemeDirection] = useState(
-    defaultSettings.themeDirection
   );
   const [themeColorPresets, setThemeColorPresets] = useState(
     defaultSettings.themeColorPresets
@@ -85,36 +72,19 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
 
   const storageAvailable = localStorageAvailable();
 
-  const langStorage = storageAvailable
-    ? localStorage.getItem("i18nextLng")
-    : "";
-
-  const isArabic = langStorage === "ar";
-
-  useEffect(() => {
-    if (isArabic) {
-      onChangeDirectionByLang("ar");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isArabic]);
-
   useEffect(() => {
     if (storageAvailable) {
       const mode = getCookie("themeMode") || defaultSettings.themeMode;
-      const layout = getCookie("themeLayout") || defaultSettings.themeLayout;
       const stretch = getCookie("themeStretch") || defaultSettings.themeStretch;
       const contrast =
         getCookie("themeContrast") || defaultSettings.themeContrast;
-      const direction =
-        getCookie("themeDirection") || defaultSettings.themeDirection;
+
       const colorPresets =
         getCookie("themeColorPresets") || defaultSettings.themeColorPresets;
 
       setThemeMode(mode as ThemeModeValue);
-      setThemeLayout(layout as ThemeLayoutValue);
       setThemeStretch(stretch as ThemeStretchValue);
       setThemeContrast(contrast as ThemeContrastValue);
-      setThemeDirection(direction as ThemeDirectionValue);
       setThemeColorPresets(colorPresets as ThemeColorPresetsValue);
     }
   }, [storageAvailable]);
@@ -131,44 +101,6 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
       const value = event.target.value as ThemeModeValue;
       setThemeMode(value);
       setCookie("themeMode", value);
-    },
-    []
-  );
-
-  // Direction
-  const onToggleDirection = useCallback(() => {
-    const value = themeDirection === "rtl" ? "ltr" : "rtl";
-    setThemeDirection(value);
-    setCookie("themeDirection", value);
-  }, [themeDirection]);
-
-  const onChangeDirection = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const value = event.target.value as ThemeDirectionValue;
-      setThemeDirection(value);
-      setCookie("themeDirection", value);
-    },
-    []
-  );
-
-  const onChangeDirectionByLang = useCallback((lang: string) => {
-    const value = lang === "ar" ? "rtl" : "ltr";
-    setThemeDirection(value);
-    setCookie("themeDirection", value);
-  }, []);
-
-  // Layout
-  const onToggleLayout = useCallback(() => {
-    const value = themeLayout === "vertical" ? "mini" : "vertical";
-    setThemeLayout(value);
-    setCookie("themeLayout", value);
-  }, [themeLayout]);
-
-  const onChangeLayout = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const value = event.target.value as ThemeLayoutValue;
-      setThemeLayout(value);
-      setCookie("themeLayout", value);
     },
     []
   );
@@ -209,16 +141,12 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
   // Reset
   const onResetSetting = useCallback(() => {
     setThemeMode(defaultSettings.themeMode);
-    setThemeLayout(defaultSettings.themeLayout);
     setThemeStretch(defaultSettings.themeStretch);
     setThemeContrast(defaultSettings.themeContrast);
-    setThemeDirection(defaultSettings.themeDirection);
     setThemeColorPresets(defaultSettings.themeColorPresets);
     removeCookie("themeMode");
-    removeCookie("themeLayout");
     removeCookie("themeStretch");
     removeCookie("themeContrast");
-    removeCookie("themeDirection");
     removeCookie("themeColorPresets");
   }, []);
 
@@ -228,15 +156,6 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
       themeMode,
       onToggleMode,
       onChangeMode,
-      // Direction
-      themeDirection,
-      onToggleDirection,
-      onChangeDirection,
-      onChangeDirectionByLang,
-      // Layout
-      themeLayout,
-      onToggleLayout,
-      onChangeLayout,
       // Contrast
       themeContrast,
       onChangeContrast,
@@ -261,15 +180,6 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
       themeColorPresets,
       onChangeColorPresets,
       onChangeContrast,
-      // Direction
-      themeDirection,
-      onToggleDirection,
-      onChangeDirection,
-      onChangeDirectionByLang,
-      // Layout
-      themeLayout,
-      onToggleLayout,
-      onChangeLayout,
       // Contrast
       themeContrast,
       onToggleContrast,

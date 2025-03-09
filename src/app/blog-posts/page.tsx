@@ -124,6 +124,54 @@ export default function BlogPostList() {
 
   return (
     <>
+      <Typography variant="h1" sx={{ mb: 1 }}>
+        H1 Blog Posts
+      </Typography>
+      <Typography variant="h2" sx={{ mb: 1 }}>
+        H2 Blog Posts
+      </Typography>
+      <Typography variant="h3" sx={{ mb: 1 }}>
+        H3 Blog Posts
+      </Typography>
+      <Typography variant="h4" sx={{ mb: 1 }}>
+        H4 Blog Posts
+      </Typography>
+      <Typography variant="h5" sx={{ mb: 1 }}>
+        H5 Blog Posts
+      </Typography>
+
+      <Typography variant="h6" sx={{ mb: 1 }}>
+        H6 Blog Posts
+      </Typography>
+
+      <Typography variant="subtitle1" sx={{ mb: 1 }}>
+        Subtitle1 Blog Posts
+      </Typography>
+
+      <Typography variant="subtitle2" sx={{ mb: 1 }}>
+        Subtitle2 Blog Posts
+      </Typography>
+
+      <Typography variant="body1" sx={{ mb: 1 }}>
+        Body1 Blog Posts
+      </Typography>
+
+      <Typography variant="body2" sx={{ mb: 1 }}>
+        Body2 Blog Posts
+      </Typography>
+
+      <Typography variant="caption" sx={{ mb: 1 }}>
+        Caption Blog Posts
+      </Typography>
+
+      <Typography variant="overline" sx={{ mb: 1 }}>
+        Overline Blog Posts
+      </Typography>
+
+      <Typography variant="button" sx={{ mb: 1 }}>
+        Button Blog Posts
+      </Typography>
+
       <ListCustom>
         <DataGrid
           sx={{
