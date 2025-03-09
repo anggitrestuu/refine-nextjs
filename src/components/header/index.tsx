@@ -1,6 +1,5 @@
 "use client";
 
-import { useSettingsContext } from "@components/settings";
 import AppBar from "@mui/material/AppBar";
 import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
@@ -19,9 +18,6 @@ type IUser = {
 export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
   sticky = true,
 }) => {
-  // const { mode, setMode } = useContext(ColorModeContext);
-  const { themeMode, onChangeMode } = useSettingsContext();
-
   const { data: user } = useGetIdentity<IUser>();
 
   return (

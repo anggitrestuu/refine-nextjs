@@ -1,6 +1,6 @@
 import authOptions from "@app/api/auth/[...nextauth]/options";
 import { Header } from "@components/header";
-import { ThemedLayoutV2 } from "@refinedev/mui";
+import { ThemedLayoutV2 } from "@components/layout";
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 import React from "react";
