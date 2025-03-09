@@ -36,6 +36,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Paper from "@mui/material/Paper";
 import Tooltip from "@mui/material/Tooltip";
 import type { RefineThemedLayoutV2SiderProps } from "@refinedev/mui";
+import { alpha, Divider, useTheme } from "@mui/material";
 
 export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
   Title: TitleFromProps,
@@ -50,9 +51,46 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
     setMobileSiderOpen,
   } = useThemedLayoutContext();
 
+  const theme = useTheme();
+
   const drawerWidth = () => {
-    if (siderCollapsed) return 56;
-    return 240;
+    if (siderCollapsed) return 64;
+    return 260;
+  };
+
+  const menuItemStyles = {
+    button: {
+      py: 1.25,
+      px: 2,
+      mx: 1,
+      my: 0.5,
+      borderRadius: "10px",
+      transition: "all 0.2s ease",
+      "&:hover": {
+        bgcolor: alpha(theme.palette.text.primary, 0.05),
+        transform: "translateX(4px)",
+      },
+      "&.Mui-selected": {
+        bgcolor: alpha(theme.palette.primary.main, 0.2),
+        color: theme.palette.primary.main,
+        "&:hover": {
+          bgcolor: alpha(theme.palette.primary.main, 0.3),
+          transform: "translateX(4px)",
+        },
+      },
+    },
+    icon: {
+      justifyContent: "center",
+      transition: "all 0.2s ease",
+      minWidth: "24px",
+      fontSize: "20px",
+      // color: "grey.500",
+    },
+    text: {
+      fontSize: "0.875rem",
+      fontWeight: 500,
+      transition: "opacity 0.3s ease",
+    },
   };
 
   const t = useTranslate();
@@ -134,17 +172,18 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
                     }
                   }}
                   sx={{
+                    ...menuItemStyles.button,
                     pl: isNested ? 4 : 2,
-                    justifyContent: "center",
+                    bgcolor: isOpen ? "action.hover" : "transparent",
                   }}
                 >
                   <ListItemIcon
                     sx={{
-                      justifyContent: "center",
-                      minWidth: "24px",
-                      transition: "margin-right 0.3s",
+                      ...menuItemStyles.icon,
                       marginRight: siderCollapsed ? "0px" : "12px",
-                      color: "currentColor",
+                      color: isOpen
+                        ? "primary.main"
+                        : theme.palette.primary.main,
                     }}
                   >
                     {icon ?? <ListOutlined />}
@@ -152,20 +191,22 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
                   <ListItemText
                     primary={label}
                     primaryTypographyProps={{
+                      ...menuItemStyles.text,
                       noWrap: true,
-                      fontSize: "14px",
                     }}
                   />
                   {isOpen ? (
                     <ExpandLess
                       sx={{
-                        color: "text.icon",
+                        color: "primary.main",
+                        transition: "transform 0.3s ease",
                       }}
                     />
                   ) : (
                     <ExpandMore
                       sx={{
-                        color: "text.icon",
+                        color: "grey.500",
+                        transition: "transform 0.3s ease",
                       }}
                     />
                   )}
@@ -212,19 +253,17 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
                 setMobileSiderOpen(false);
               }}
               sx={{
+                ...menuItemStyles.button,
                 pl: isNested ? 4 : 2,
-                py: isNested ? 1.25 : 1,
-                justifyContent: "center",
-                color: isSelected ? "primary.main" : "text.primary",
               }}
             >
               <ListItemIcon
                 sx={{
-                  justifyContent: "center",
-                  transition: "margin-right 0.3s",
+                  ...menuItemStyles.icon,
                   marginRight: siderCollapsed ? "0px" : "12px",
-                  minWidth: "24px",
-                  color: "currentColor",
+                  color: isSelected
+                    ? theme.palette.primary.main
+                    : theme.palette.text.primary,
                 }}
               >
                 {icon ?? <ListOutlined />}
@@ -232,8 +271,8 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
               <ListItemText
                 primary={label}
                 primaryTypographyProps={{
+                  ...menuItemStyles.text,
                   noWrap: true,
-                  fontSize: "14px",
                 }}
               />
             </ListItemButton>
@@ -259,20 +298,18 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
             setMobileSiderOpen(false);
           }}
           sx={{
-            pl: 2,
-            py: 1,
-            justifyContent: "center",
+            ...menuItemStyles.button,
             color: selectedKey === "/" ? "primary.main" : "text.primary",
           }}
         >
           <ListItemIcon
             sx={{
-              justifyContent: "center",
-              minWidth: "24px",
-              transition: "margin-right 0.3s",
+              ...menuItemStyles.icon,
               marginRight: siderCollapsed ? "0px" : "12px",
-              color: "currentColor",
-              fontSize: "14px",
+              color:
+                selectedKey === "/"
+                  ? "primary.main"
+                  : theme.palette.primary.main,
             }}
           >
             <Dashboard />
@@ -280,8 +317,8 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
           <ListItemText
             primary={translate("dashboard.title", "Dashboard")}
             primaryTypographyProps={{
+              ...menuItemStyles.text,
               noWrap: true,
-              fontSize: "14px",
             }}
           />
         </ListItemButton>
@@ -308,39 +345,46 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
   };
 
   const logout = isExistAuthentication && (
-    <Tooltip
-      title={t("buttons.logout", "Logout")}
-      placement="right"
-      disableHoverListener={!siderCollapsed}
-      arrow
-    >
-      <ListItemButton
-        key="logout"
-        onClick={() => handleLogout()}
+    <>
+      <Divider
         sx={{
-          justifyContent: "center",
+          my: 1,
+          mx: 1,
+          bgcolor: "divider",
         }}
+      />
+      <Tooltip
+        title={t("buttons.logout", "Logout")}
+        placement="right"
+        disableHoverListener={!siderCollapsed}
+        arrow
       >
-        <ListItemIcon
+        <ListItemButton
+          key="logout"
+          onClick={() => handleLogout()}
           sx={{
-            justifyContent: "center",
-            minWidth: "24px",
-            transition: "margin-right 0.3s",
-            marginRight: siderCollapsed ? "0px" : "12px",
-            color: "currentColor",
+            ...menuItemStyles.button,
           }}
         >
-          <Logout />
-        </ListItemIcon>
-        <ListItemText
-          primary={t("buttons.logout", "Logout")}
-          primaryTypographyProps={{
-            noWrap: true,
-            fontSize: "14px",
-          }}
-        />
-      </ListItemButton>
-    </Tooltip>
+          <ListItemIcon
+            sx={{
+              ...menuItemStyles.icon,
+              marginRight: siderCollapsed ? "0px" : "12px",
+              color: "error.main",
+            }}
+          >
+            <Logout />
+          </ListItemIcon>
+          <ListItemText
+            primary={t("buttons.logout", "Logout")}
+            primaryTypographyProps={{
+              ...menuItemStyles.text,
+              noWrap: true,
+            }}
+          />
+        </ListItemButton>
+      </Tooltip>
+    </>
   );
 
   const items = renderTreeView(menuItems, selectedKey);
@@ -368,7 +412,7 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
       disablePadding
       sx={{
         flexGrow: 1,
-        paddingTop: "16px",
+        pt: 2,
       }}
     >
       {renderSider()}
@@ -402,7 +446,7 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
           open={mobileSiderOpen}
           onClose={() => setMobileSiderOpen(false)}
           ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
+            keepMounted: true,
           }}
           sx={{
             display: {
@@ -454,15 +498,23 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
               justifyContent: siderCollapsed ? "center" : "space-between",
               paddingLeft: siderCollapsed ? 0 : "16px",
               paddingRight: siderCollapsed ? 0 : "8px",
-              variant: "outlined",
               borderRadius: 0,
-              borderBottom: (theme) =>
-                `1px solid ${theme.palette.action.focus}`,
+              borderBottom: "1px solid",
+              borderColor: "divider",
+              bgcolor: "transparent",
             }}
           >
             <RenderToTitle collapsed={siderCollapsed} />
             {!siderCollapsed && (
-              <IconButton size="small" onClick={() => setSiderCollapsed(true)}>
+              <IconButton
+                size="small"
+                onClick={() => setSiderCollapsed(true)}
+                sx={{
+                  "&:hover": {
+                    bgcolor: "action.hover",
+                  },
+                }}
+              >
                 {<ChevronLeft />}
               </IconButton>
             )}
@@ -472,6 +524,19 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
               flexGrow: 1,
               overflowX: "hidden",
               overflowY: "auto",
+              "&::-webkit-scrollbar": {
+                width: "6px",
+              },
+              "&::-webkit-scrollbar-track": {
+                background: "transparent",
+              },
+              "&::-webkit-scrollbar-thumb": {
+                background: (theme) =>
+                  theme.palette.mode === "light"
+                    ? "rgba(0,0,0,0.2)"
+                    : "rgba(255,255,255,0.2)",
+                borderRadius: "3px",
+              },
             }}
           >
             {drawer}

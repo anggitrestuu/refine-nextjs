@@ -1,5 +1,4 @@
 import authOptions from "@app/api/auth/[...nextauth]/options";
-import { Header } from "@components/header";
 import { ThemedLayoutV2 } from "@components/layout";
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
@@ -12,7 +11,7 @@ export default async function Layout({ children }: React.PropsWithChildren) {
     return redirect("/login");
   }
 
-  return <ThemedLayoutV2 Header={Header}>{children}</ThemedLayoutV2>;
+  return <ThemedLayoutV2>{children}</ThemedLayoutV2>;
 }
 
 async function getData() {

@@ -5,20 +5,12 @@ import { ThemedLayoutContextProvider } from "@refinedev/mui";
 import { ThemedHeaderV2 as DefaultHeader } from "./header";
 import { ThemedSiderV2 as DefaultSider } from "./sider";
 import Box from "@mui/material/Box";
-import type { BoxProps } from "@mui/material";
+import { Container, type BoxProps } from "@mui/material";
 import type { RefineThemedLayoutV2Props } from "@refinedev/mui";
+import { useSettingsContext } from "@components/settings";
 
 interface ExtendedRefineThemedLayoutV2Props extends RefineThemedLayoutV2Props {
-  /**
-   * Additional properties for the children box.
-   * This type includes all properties of BoxProps, including 'sx'.
-   */
   childrenBoxProps?: BoxProps;
-
-  /**
-   * Additional properties for the container box.
-   * This type includes all properties of BoxProps, including 'sx'.
-   */
   containerBoxProps?: BoxProps;
 }
 
@@ -40,13 +32,20 @@ export const ThemedLayoutV2: React.FC<ExtendedRefineThemedLayoutV2Props> = ({
   const { sx: childrenSx, ...restChildrenProps } = childrenBoxProps;
   const { sx: containerSx, ...restContainerProps } = containerBoxProps;
 
+  const { themeStretch } = useSettingsContext();
+
   return (
     <ThemedLayoutContextProvider
       initialSiderCollapsed={initialSiderCollapsed}
       onSiderCollapsed={onSiderCollapsed}
     >
       <Box
-        sx={{ display: "flex", flexDirection: "row", ...containerSx }}
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          minHeight: "100vh",
+          ...containerSx,
+        }}
         {...restContainerProps}
       >
         <SiderToRender Title={Title} />
@@ -56,24 +55,23 @@ export const ThemedLayoutV2: React.FC<ExtendedRefineThemedLayoutV2Props> = ({
               display: "flex",
               flexDirection: "column",
               flex: 1,
-              minWidth: "1px",
-              minHeight: "1px",
+              minWidth: 0,
+              minHeight: "100vh",
+              position: "relative",
+              transition: "padding 0.2s ease",
             },
           ]}
         >
           <HeaderToRender />
-          <Box
-            component="main"
+          <Container
+            maxWidth={themeStretch ? false : "lg"}
             sx={{
-              p: { xs: 1, md: 2, lg: 3 },
-              flexGrow: 1,
-              bgcolor: (theme) => theme.palette.background.default,
-              ...childrenSx,
+              py: 3,
+              ...restChildrenProps,
             }}
-            {...restChildrenProps}
           >
             {children}
-          </Box>
+          </Container>
           {Footer && <Footer />}
         </Box>
         {OffLayoutArea && <OffLayoutArea />}
