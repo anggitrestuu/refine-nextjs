@@ -1,6 +1,6 @@
 "use client";
 
-import { Typography } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
 import { DataGrid, type GridColDef } from "@mui/x-data-grid";
 import { useMany } from "@refinedev/core";
 import {
@@ -11,6 +11,8 @@ import {
   ShowButton,
   useDataGrid,
 } from "@refinedev/mui";
+
+import { List as ListCustom } from "@components/crud/list";
 import React from "react";
 
 export default function BlogPostList() {
@@ -121,8 +123,26 @@ export default function BlogPostList() {
   );
 
   return (
-    <List>
-      <DataGrid {...dataGridProps} columns={columns} />
-    </List>
+    <>
+      <ListCustom>
+        <DataGrid
+          sx={{
+            borderRadius: 1,
+          }}
+          {...dataGridProps}
+          columns={columns}
+        />
+      </ListCustom>
+      <Box sx={{ py: 2 }} />
+      <List
+        createButtonProps={{
+          name: "Create Blog Post",
+          title: "Create Blog Post",
+          href: "/blog-posts/createsss",
+        }}
+      >
+        <DataGrid {...dataGridProps} columns={columns} />
+      </List>
+    </>
   );
 }
