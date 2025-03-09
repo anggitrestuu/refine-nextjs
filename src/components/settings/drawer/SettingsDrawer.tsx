@@ -30,6 +30,7 @@ import StretchOptions from "./StretchOptions";
 import ContrastOptions from "./ContrastOptions";
 import FullScreenOptions from "./FullScreenOptions";
 import ColorPresetsOptions from "./ColorPresetsOptions";
+import FontSizeOptions from "./FontSizeOptions";
 
 // ----------------------------------------------------------------------
 
@@ -41,6 +42,7 @@ export default function SettingsDrawer() {
     themeStretch,
     themeContrast,
     themeColorPresets,
+    themeFontSize,
     onResetSetting,
   } = useSettingsContext();
 
@@ -60,7 +62,8 @@ export default function SettingsDrawer() {
     themeMode !== defaultSettings.themeMode ||
     themeStretch !== defaultSettings.themeStretch ||
     themeContrast !== defaultSettings.themeContrast ||
-    themeColorPresets !== defaultSettings.themeColorPresets;
+    themeColorPresets !== defaultSettings.themeColorPresets ||
+    themeFontSize !== defaultSettings.themeFontSize;
 
   return (
     <>
@@ -137,6 +140,10 @@ export default function SettingsDrawer() {
 
           <Block title="Presets">
             <ColorPresetsOptions />
+          </Block>
+
+          <Block title="Font Size">
+            <FontSizeOptions />
           </Block>
         </Scrollbar>
 

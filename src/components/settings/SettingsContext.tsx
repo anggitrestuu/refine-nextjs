@@ -17,6 +17,7 @@ import {
   ThemeContrastValue,
   SettingsContextProps,
   ThemeColorPresetsValue,
+  ThemeFontSizeValue,
 } from "./types";
 
 // ----------------------------------------------------------------------
@@ -26,6 +27,13 @@ const initialState: SettingsContextProps = {
   // Mode
   onToggleMode: () => {},
   onChangeMode: () => {},
+  // Direction
+  onToggleDirection: () => {},
+  onChangeDirection: () => {},
+  onChangeDirectionByLang: () => {},
+  // Layout
+  onToggleLayout: () => {},
+  onChangeLayout: () => {},
   // Contrast
   onToggleContrast: () => {},
   onChangeContrast: () => {},
@@ -33,6 +41,9 @@ const initialState: SettingsContextProps = {
   onChangeColorPresets: () => {},
   presetsColor: defaultPreset,
   presetsOption: [],
+  // Font Size
+  themeFontSize: defaultSettings.themeFontSize,
+  onChangeFontSize: () => {},
   // Stretch
   onToggleStretch: () => {},
   // Reset
@@ -70,6 +81,10 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
     defaultSettings.themeColorPresets
   );
 
+  const [themeFontSize, setThemeFontSize] = useState(
+    defaultSettings.themeFontSize
+  );
+
   const storageAvailable = localStorageAvailable();
 
   useEffect(() => {
@@ -82,7 +97,11 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
       const colorPresets =
         getCookie("themeColorPresets") || defaultSettings.themeColorPresets;
 
+      const fontSize =
+        getCookie("themeFontSize") || defaultSettings.themeFontSize;
+
       setThemeMode(mode as ThemeModeValue);
+      setThemeFontSize(fontSize as ThemeFontSizeValue);
       setThemeStretch(stretch as ThemeStretchValue);
       setThemeContrast(contrast as ThemeContrastValue);
       setThemeColorPresets(colorPresets as ThemeColorPresetsValue);
@@ -131,6 +150,16 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
     []
   );
 
+  // Font Size
+  const onChangeFontSize = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const value = event.target.value as ThemeFontSizeValue;
+      setThemeFontSize(value);
+      setCookie("themeFontSize", value);
+    },
+    []
+  );
+
   // Stretch
   const onToggleStretch = useCallback(() => {
     const value = !themeStretch;
@@ -144,10 +173,12 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
     setThemeStretch(defaultSettings.themeStretch);
     setThemeContrast(defaultSettings.themeContrast);
     setThemeColorPresets(defaultSettings.themeColorPresets);
+    setThemeFontSize(defaultSettings.themeFontSize);
     removeCookie("themeMode");
     removeCookie("themeStretch");
     removeCookie("themeContrast");
     removeCookie("themeColorPresets");
+    removeCookie("themeFontSize");
   }, []);
 
   const memoizedValue = useMemo(
@@ -156,6 +187,13 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
       themeMode,
       onToggleMode,
       onChangeMode,
+      // Direction
+      onToggleDirection: () => {},
+      onChangeDirection: () => {},
+      onChangeDirectionByLang: () => {},
+      // Layout
+      onToggleLayout: () => {},
+      onChangeLayout: () => {},
       // Contrast
       themeContrast,
       onChangeContrast,
@@ -168,25 +206,25 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
       onChangeColorPresets,
       presetsOption,
       presetsColor: getPresets(themeColorPresets),
+      // Font Size
+      themeFontSize,
+      onChangeFontSize,
       // Reset
       onResetSetting,
     }),
     [
-      // Mode
       themeMode,
-      onChangeMode,
       onToggleMode,
-      // Color
+      onChangeMode,
       themeColorPresets,
       onChangeColorPresets,
       onChangeContrast,
-      // Contrast
       themeContrast,
       onToggleContrast,
-      // Stretch
       themeStretch,
       onToggleStretch,
-      // Reset
+      themeFontSize,
+      onChangeFontSize,
       onResetSetting,
     ]
   );
