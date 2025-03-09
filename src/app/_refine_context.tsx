@@ -1,6 +1,6 @@
 "use client";
 
-import { GitHubBanner, Refine, type AuthProvider } from "@refinedev/core";
+import { Refine, type AuthProvider } from "@refinedev/core";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 import {
   RefineSnackbarProvider,
@@ -12,8 +12,16 @@ import React from "react";
 
 import routerProvider from "@refinedev/nextjs-router";
 
-import { ColorModeContextProvider } from "@contexts/color-mode";
 import { dataProvider } from "@providers/data-provider";
+
+// scroll bar
+import "simplebar-react/dist/simplebar.min.css";
+
+// theme
+import ThemeProvider from "../theme";
+
+// components
+import { ThemeSettings, SettingsProvider } from "../components/settings";
 
 type RefineContextProps = {
   defaultMode?: string;
@@ -101,52 +109,53 @@ const App = (props: React.PropsWithChildren<AppProps>) => {
     },
   };
 
-  const defaultMode = props?.defaultMode;
-
   return (
     <>
-      <GitHubBanner />
       <RefineKbarProvider>
-        <ColorModeContextProvider defaultMode={defaultMode}>
-          <RefineSnackbarProvider>
-            <Refine
-              routerProvider={routerProvider}
-              dataProvider={dataProvider}
-              notificationProvider={useNotificationProvider}
-              authProvider={authProvider}
-              resources={[
-                {
-                  name: "blog_posts",
-                  list: "/blog-posts",
-                  create: "/blog-posts/create",
-                  edit: "/blog-posts/edit/:id",
-                  show: "/blog-posts/show/:id",
-                  meta: {
-                    canDelete: true,
-                  },
-                },
-                {
-                  name: "categories",
-                  list: "/categories",
-                  create: "/categories/create",
-                  edit: "/categories/edit/:id",
-                  show: "/categories/show/:id",
-                  meta: {
-                    canDelete: true,
-                  },
-                },
-              ]}
-              options={{
-                syncWithLocation: true,
-                warnWhenUnsavedChanges: true,
-                useNewQueryKeys: true,
-              }}
-            >
-              {props.children}
-              <RefineKbar />
-            </Refine>
-          </RefineSnackbarProvider>
-        </ColorModeContextProvider>
+        <SettingsProvider>
+          <ThemeProvider>
+            <ThemeSettings>
+              <RefineSnackbarProvider>
+                <Refine
+                  routerProvider={routerProvider}
+                  dataProvider={dataProvider}
+                  notificationProvider={useNotificationProvider}
+                  authProvider={authProvider}
+                  resources={[
+                    {
+                      name: "blog_posts",
+                      list: "/blog-posts",
+                      create: "/blog-posts/create",
+                      edit: "/blog-posts/edit/:id",
+                      show: "/blog-posts/show/:id",
+                      meta: {
+                        canDelete: true,
+                      },
+                    },
+                    {
+                      name: "categories",
+                      list: "/categories",
+                      create: "/categories/create",
+                      edit: "/categories/edit/:id",
+                      show: "/categories/show/:id",
+                      meta: {
+                        canDelete: true,
+                      },
+                    },
+                  ]}
+                  options={{
+                    syncWithLocation: true,
+                    warnWhenUnsavedChanges: true,
+                    useNewQueryKeys: true,
+                  }}
+                >
+                  {props.children}
+                  <RefineKbar />
+                </Refine>
+              </RefineSnackbarProvider>
+            </ThemeSettings>
+          </ThemeProvider>
+        </SettingsProvider>
       </RefineKbarProvider>
     </>
   );
