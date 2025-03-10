@@ -163,7 +163,6 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
     text: {
       fontWeight: 600,
       transition: "all 0.3s ease",
-      fontSize: "0.9rem",
       letterSpacing: "0.015em",
     },
   };
@@ -580,7 +579,6 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
                 display: "flex",
                 alignItems: "center",
                 paddingLeft: "16px",
-                fontSize: "14px",
                 backdropFilter: "blur(20px)",
                 background: (theme) =>
                   `linear-gradient(135deg, 
@@ -641,7 +639,6 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
           <Paper
             elevation={0}
             sx={{
-              fontSize: "14px",
               width: "100%",
               height: 64,
               display: "flex",
