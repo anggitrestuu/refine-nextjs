@@ -32,6 +32,15 @@ export default function ThemeProvider({ children }: Props) {
       shape: { borderRadius: 8 },
       shadows: shadows(themeMode),
       customShadows: customShadows(themeMode),
+      components: {
+        MuiDrawer: {
+          styleOverrides: {
+            paper: {
+              transition: "all 0.3s ease-in-out",
+            },
+          },
+        },
+      },
     }),
     [themeMode, themeFontSize]
   );

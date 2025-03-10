@@ -60,108 +60,51 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
 
   const menuItemStyles = {
     button: {
-      py: 1.75,
-      px: 3,
-      mx: 2,
-      my: 0.5,
-      borderRadius: "16px",
-      transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-      position: "relative",
-      overflow: "hidden",
-      "&::before": {
-        content: '""',
-        position: "absolute",
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        opacity: 0,
-        transition: "opacity 0.3s ease",
-        background: (theme: Theme) =>
-          `radial-gradient(circle at center, ${alpha(
-            theme.palette.primary.main,
-            0.1
-          )} 0%, ${alpha(theme.palette.primary.main, 0.05)} 100%)`,
-      },
+      width: "95%",
+      borderRadius: "12px",
+      margin: "4px auto",
+      padding: "10px 12px",
+      color: (theme: Theme) => theme.palette.text.primary,
       "&:hover": {
         transform: "translateX(4px) scale(1.01)",
-        "&::before": {
-          opacity: 1,
-        },
-        "& .MuiListItemIcon-root": {
-          transform: "scale(1.1) rotate(5deg)",
-          color: "primary.main",
-          filter: "drop-shadow(0 0 8px rgba(0, 0, 0, 0.2))",
-        },
-        "& .MuiListItemText-primary": {
-          background: (theme: Theme) =>
-            `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-          textShadow: "0 0 20px rgba(0, 0, 0, 0.1)",
-        },
+        background: (theme: Theme) =>
+          `linear-gradient(135deg, ${alpha(
+            theme.palette.primary.light,
+            0.1
+          )}, ${alpha(theme.palette.primary.main, 0.1)})`,
+        boxShadow: (theme: Theme) =>
+          `0 4px 8px -2px ${alpha(theme.palette.primary.main, 0.2)}`,
       },
       "&.Mui-selected": {
         background: (theme: Theme) =>
           `linear-gradient(135deg, ${alpha(
             theme.palette.primary.light,
-            0.15
-          )}, ${alpha(theme.palette.primary.main, 0.15)})`,
-        boxShadow: (theme: Theme) =>
-          `0 0 20px ${alpha(
-            theme.palette.primary.main,
-            0.15
-          )}, inset 0 0 8px ${alpha(theme.palette.primary.light, 0.2)}`,
-        backdropFilter: "blur(20px)",
+            0.2
+          )}, ${alpha(theme.palette.primary.main, 0.2)})`,
         "&::before": {
-          opacity: 1,
-          background: (theme: Theme) =>
-            `radial-gradient(circle at center, ${alpha(
-              theme.palette.primary.main,
-              0.15
-            )} 0%, ${alpha(theme.palette.primary.main, 0.1)} 100%)`,
-        },
-        "&:hover": {
-          transform: "translateX(4px) scale(1.01)",
-          background: (theme: Theme) =>
-            `linear-gradient(135deg, ${alpha(
-              theme.palette.primary.light,
-              0.2
-            )}, ${alpha(theme.palette.primary.main, 0.2)})`,
-          boxShadow: (theme: Theme) =>
-            `0 0 25px ${alpha(
-              theme.palette.primary.main,
-              0.2
-            )}, inset 0 0 12px ${alpha(theme.palette.primary.light, 0.3)}`,
-        },
-        "& .MuiListItemIcon-root": {
-          color: "primary.main",
-          transform: "scale(1.1)",
-          filter: "drop-shadow(0 0 8px rgba(0, 0, 0, 0.2))",
-        },
-        "& .MuiListItemText-primary": {
-          fontWeight: 700,
-          background: (theme: Theme) =>
-            `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-          textShadow: "0 0 20px rgba(0, 0, 0, 0.1)",
+          content: '""',
+          position: "absolute",
+          left: 0,
+          top: "50%",
+          transform: "translateY(-50%)",
+          width: "4px",
+          height: "60%",
+          borderRadius: "0 4px 4px 0",
+          backgroundColor: "primary.main",
         },
       },
     },
     icon: {
-      justifyContent: "center",
-      transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-      minWidth: "28px",
-      marginRight: "16px !important",
-      color: (theme: Theme) => alpha(theme.palette.text.primary, 0.7),
+      minWidth: "32px",
+      transition: "all 0.3s ease",
       "& svg": {
         fontSize: "1.3rem",
-        transition: "transform 0.3s ease",
+        transition: "transform 0.2s ease",
       },
     },
     text: {
-      fontWeight: 600,
+      fontSize: "0.875rem",
+      fontWeight: 500,
       transition: "all 0.3s ease",
       letterSpacing: "0.015em",
     },
@@ -448,12 +391,12 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
               background: (theme) =>
                 `linear-gradient(135deg, ${alpha(
                   theme.palette.error.light,
-                  0.1
-                )}, ${alpha(theme.palette.error.main, 0.1)})`,
+                  0.08
+                )}, ${alpha(theme.palette.error.main, 0.08)})`,
               "& .MuiListItemIcon-root": {
                 transform: "scale(1.1) rotate(5deg)",
                 color: "error.main",
-                filter: "drop-shadow(0 0 8px rgba(0, 0, 0, 0.2))",
+                filter: "drop-shadow(0 0 8px rgba(255, 72, 66, 0.24))",
               },
               "& .MuiListItemText-primary": {
                 color: "error.main",
@@ -465,7 +408,7 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
               marginRight: siderCollapsed
                 ? "0px !important"
                 : "16px !important",
-              color: "error.main",
+              color: (theme) => alpha(theme.palette.error.main, 0.8),
             },
           }}
         >
@@ -555,15 +498,17 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
               background: (theme) =>
                 theme.palette.mode === "light"
                   ? `linear-gradient(135deg, 
-                      ${alpha(theme.palette.primary.lighter, 0.12)}, 
-                      ${alpha(theme.palette.background.default, 0.8)})`
+                      ${alpha(theme.palette.primary.lighter, 0.08)}, 
+                      ${alpha(theme.palette.background.default, 0.95)})`
                   : `linear-gradient(135deg, 
-                      ${alpha(theme.palette.primary.darker, 0.12)}, 
-                      ${alpha(theme.palette.background.default, 0.8)})`,
+                      ${alpha(theme.palette.primary.darker, 0.08)}, 
+                      ${alpha(theme.palette.background.default, 0.95)})`,
               backdropFilter: "blur(20px)",
+              borderRight: (theme) =>
+                `1px solid ${alpha(theme.palette.divider, 0.05)}`,
               boxShadow: (theme) =>
                 theme.palette.mode === "light"
-                  ? "none"
+                  ? `0 0 2px ${alpha(theme.palette.grey[500], 0.2)}`
                   : `0 0 2px ${alpha(theme.palette.common.white, 0.2)}`,
             },
           }}
