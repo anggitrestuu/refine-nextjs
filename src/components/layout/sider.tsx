@@ -83,11 +83,8 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
       justifyContent: "center",
       transition: "all 0.2s ease",
       minWidth: "24px",
-      fontSize: "20px",
-      // color: "grey.500",
     },
     text: {
-      fontSize: "0.875rem",
       fontWeight: 500,
       transition: "opacity 0.3s ease",
     },
