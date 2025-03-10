@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   useGetIdentity,
   useActiveAuthProvider,
@@ -17,11 +17,13 @@ import InputBase from "@mui/material/InputBase";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SearchIcon from "@mui/icons-material/Search";
 import type { RefineThemedLayoutV2HeaderProps } from "@refinedev/mui";
+import { alpha } from "@mui/material";
 
 export const ThemedHeaderV2: React.FC<RefineThemedLayoutV2HeaderProps> = ({
   isSticky,
   sticky,
 }) => {
+  const [scrolled, setScrolled] = useState(false);
   const authProvider = useActiveAuthProvider();
   const { data: user } = useGetIdentity({
     v3LegacyAuthProviderCompatible: Boolean(authProvider?.isLegacy),
@@ -29,18 +31,30 @@ export const ThemedHeaderV2: React.FC<RefineThemedLayoutV2HeaderProps> = ({
 
   const prefferedSticky = pickNotDeprecated(sticky, isSticky) ?? true;
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 20;
+      setScrolled(isScrolled);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <AppBar
       position={prefferedSticky ? "sticky" : "relative"}
       elevation={0}
       sx={{
-        backgroundColor: (theme) =>
-          theme.palette.mode === "light"
-            ? "#ffffff"
-            : theme.palette.background.default,
-        borderBottom: "1px solid",
-        borderColor: "divider",
+        backgroundColor: (theme) => {
+          const baseColor =
+            theme.palette.mode === "light"
+              ? "#ffffff"
+              : theme.palette.background.default;
+          return scrolled ? alpha(baseColor, 0.92) : alpha(baseColor, 0); // cc = 80% opacity
+        },
         color: "text.primary",
+        transition: "background-color 0.3s ease",
       }}
     >
       <Toolbar
