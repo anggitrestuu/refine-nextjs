@@ -98,7 +98,7 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
         getCookie("themeColorPresets") || defaultSettings.themeColorPresets;
 
       const fontSize =
-        getCookie("themeFontSize") || defaultSettings.themeFontSize;
+        Number(getCookie("themeFontSize")) || defaultSettings.themeFontSize;
 
       setThemeMode(mode as ThemeModeValue);
       setThemeFontSize(fontSize as ThemeFontSizeValue);
@@ -151,14 +151,10 @@ export function SettingsProvider({ children }: SettingsProviderProps) {
   );
 
   // Font Size
-  const onChangeFontSize = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const value = event.target.value as ThemeFontSizeValue;
-      setThemeFontSize(value);
-      setCookie("themeFontSize", value);
-    },
-    []
-  );
+  const onChangeFontSize = useCallback((value: ThemeFontSizeValue) => {
+    setThemeFontSize(value);
+    setCookie("themeFontSize", String(value));
+  }, []);
 
   // Stretch
   const onToggleStretch = useCallback(() => {

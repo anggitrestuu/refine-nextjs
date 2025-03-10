@@ -4,14 +4,9 @@ import { ThemeFontSizeValue } from '../components/settings/types'
 // ----------------------------------------------------------------------
 
 const getFontSizeScaleFactor = (fontSize: ThemeFontSizeValue): number => {
-  switch (fontSize) {
-    case 'small':
-      return 0.85;
-    case 'large':
-      return 1.15;
-    default:
-      return 1;
-  }
+  // Calculate scale factor based on pixel value
+  // 16px is our base (100%)
+  return fontSize / 16;
 };
 
 export function remToPx(value: string) {
@@ -55,7 +50,7 @@ export const secondaryFont = Barlow({
 // LEARN MORE
 // https://nextjs.org/docs/basic-features/font-optimization#google-fonts
 
-const typography = (fontSize: ThemeFontSizeValue = 'medium') => {
+const typography = (fontSize: ThemeFontSizeValue = 16) => {
   const scaleFactor = getFontSizeScaleFactor(fontSize);
   
   return {

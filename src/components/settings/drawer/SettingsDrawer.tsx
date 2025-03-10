@@ -143,6 +143,7 @@ export default function SettingsDrawer() {
           </Block>
 
           <Block title="Font Size">
+            <Box sx={{ py: 0.5 }} />
             <FontSizeOptions />
           </Block>
         </Scrollbar>

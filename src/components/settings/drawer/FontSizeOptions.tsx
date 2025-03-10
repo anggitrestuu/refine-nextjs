@@ -1,58 +1,44 @@
 // @mui
-import { RadioGroup } from "@mui/material";
-import { alpha } from "@mui/material/styles";
+import { Slider, Typography, Box } from "@mui/material";
 // components
 import { useSettingsContext } from "../SettingsContext";
-import { StyledCard, StyledWrap, MaskControl } from "../styles";
+import { StyledCard } from "../styles";
 
 // ----------------------------------------------------------------------
 
-const FONT_OPTIONS = [
-  { name: "small", label: "Small" },
-  { name: "medium", label: "Normal" },
-  { name: "large", label: "Large" },
+const marks = [
+  { value: 12, label: "" },
+  { value: 13, label: "" },
+  { value: 14, label: "" },
+  { value: 15, label: "" },
+  { value: 16, label: "" },
+  { value: 17, label: "" },
+  { value: 18, label: "" },
+  { value: 19, label: "" },
+  { value: 20, label: "" },
 ];
 
 export default function FontSizeOptions() {
   const { themeFontSize, onChangeFontSize } = useSettingsContext();
 
   return (
-    <RadioGroup
-      name="themeFontSize"
+    <Slider
+      size="medium"
       value={themeFontSize}
-      onChange={onChangeFontSize}
-    >
-      <StyledWrap sx={{ gridTemplateColumns: "repeat(3, 1fr)" }}>
-        {FONT_OPTIONS.map((option) => {
-          const { name, label } = option;
-          const selected = themeFontSize === name;
-
-          return (
-            <StyledCard
-              key={name}
-              selected={selected}
-              sx={{
-                height: 48,
-                ...(selected && {
-                  bgcolor: (theme) => alpha(theme.palette.primary.main, 0.08),
-                  borderColor: (theme) =>
-                    alpha(theme.palette.primary.main, 0.24),
-                }),
-              }}
-            >
-              <div
-                style={{
-                  textAlign: "center",
-                  fontWeight: selected ? 600 : 400,
-                }}
-              >
-                {label}
-              </div>
-              <MaskControl value={name} />
-            </StyledCard>
-          );
-        })}
-      </StyledWrap>
-    </RadioGroup>
+      onChange={(_, value) => {
+        onChangeFontSize(value as number);
+      }}
+      step={1}
+      min={12}
+      max={20}
+      marks={marks}
+      valueLabelDisplay="on"
+      valueLabelFormat={(value) => `${value}px`}
+      sx={{
+        ".MuiSlider-valueLabel": {
+          fontSize: 12,
+        },
+      }}
+    />
   );
 }

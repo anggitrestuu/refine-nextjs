@@ -8,6 +8,6 @@ export const defaultSettings: SettingsValueProps = {
   themeMode: 'light',
   themeContrast: 'default',
   themeColorPresets: 'default',
-  themeFontSize: 'medium',
+  themeFontSize: 16,
   themeStretch: false,
 };

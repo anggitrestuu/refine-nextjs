@@ -13,7 +13,7 @@ type ColorVariants = {
 export type ThemeModeValue = 'light' | 'dark';
 export type ThemeContrastValue = 'default' | 'bold';
 export type ThemeColorPresetsValue = 'default' | 'cyan' | 'purple' | 'blue' | 'orange' | 'red';
-export type ThemeFontSizeValue = 'small' | 'medium' | 'large';
+export type ThemeFontSizeValue = number;
 export type ThemeStretchValue = boolean;
 
 export type SettingsValueProps = {
@@ -52,7 +52,7 @@ export type SettingsContextProps = SettingsValueProps & {
   onChangeColorPresets: (event: React.ChangeEvent<HTMLInputElement>) => void;
 
   // Font Size
-  onChangeFontSize: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeFontSize: (value: ThemeFontSizeValue) => void;
 
   // Stretch
   onToggleStretch: VoidFunction;
