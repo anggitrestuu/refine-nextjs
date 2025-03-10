@@ -250,16 +250,14 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
                     ...menuItemStyles.button,
                     pl: isNested ? 4 : 2,
                     bgcolor: isOpen ? "action.hover" : "transparent",
-                    "& .MuiListItemIcon-root": {
-                      ...menuItemStyles.icon,
-                      marginRight: siderCollapsed
-                        ? "0px !important"
-                        : "16px !important",
-                    },
                   }}
                 >
                   <ListItemIcon
                     sx={{
+                      ...menuItemStyles.icon,
+                      marginRight: siderCollapsed
+                        ? "0px !important"
+                        : "16px !important",
                       color: isOpen
                         ? "primary.main"
                         : theme.palette.primary.main,
@@ -334,16 +332,14 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
               sx={{
                 ...menuItemStyles.button,
                 pl: isNested ? 4 : 2,
-                "& .MuiListItemIcon-root": {
-                  ...menuItemStyles.icon,
-                  marginRight: siderCollapsed
-                    ? "0px !important"
-                    : "16px !important",
-                },
               }}
             >
               <ListItemIcon
                 sx={{
+                  ...menuItemStyles.icon,
+                  marginRight: siderCollapsed
+                    ? "0px !important"
+                    : "16px !important",
                   color: isSelected
                     ? theme.palette.primary.main
                     : theme.palette.text.primary,
@@ -383,16 +379,14 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
           sx={{
             ...menuItemStyles.button,
             color: selectedKey === "/" ? "primary.main" : "text.primary",
-            "& .MuiListItemIcon-root": {
-              ...menuItemStyles.icon,
-              marginRight: siderCollapsed
-                ? "0px !important"
-                : "16px !important",
-            },
           }}
         >
           <ListItemIcon
             sx={{
+              ...menuItemStyles.icon,
+              marginRight: siderCollapsed
+                ? "0px !important"
+                : "16px !important",
               color:
                 selectedKey === "/"
                   ? theme.palette.primary.main
@@ -557,6 +551,22 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
               sm: "block",
               md: "none",
             },
+            "& .MuiDrawer-paper": {
+              width: drawerWidth(),
+              background: (theme) =>
+                theme.palette.mode === "light"
+                  ? `linear-gradient(135deg, 
+                      ${alpha(theme.palette.primary.lighter, 0.12)}, 
+                      ${alpha(theme.palette.background.default, 0.8)})`
+                  : `linear-gradient(135deg, 
+                      ${alpha(theme.palette.primary.darker, 0.12)}, 
+                      ${alpha(theme.palette.background.default, 0.8)})`,
+              backdropFilter: "blur(20px)",
+              boxShadow: (theme) =>
+                theme.palette.mode === "light"
+                  ? "none"
+                  : `0 0 2px ${alpha(theme.palette.common.white, 0.2)}`,
+            },
           }}
         >
           <Box
@@ -571,6 +581,11 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
                 alignItems: "center",
                 paddingLeft: "16px",
                 fontSize: "14px",
+                backdropFilter: "blur(20px)",
+                background: (theme) =>
+                  `linear-gradient(135deg, 
+                    ${alpha(theme.palette.primary.lighter, 0.08)},
+                    ${alpha(theme.palette.background.default, 0.95)})`,
               }}
             >
               <RenderToTitle collapsed={false} />
@@ -588,23 +603,37 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
               transition: "width 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
               background: (theme) =>
                 theme.palette.mode === "light"
-                  ? `linear-gradient(135deg, ${alpha(
-                      theme.palette.background.paper,
-                      0.9
-                    )}, ${alpha(theme.palette.background.paper, 0.8)})`
-                  : `linear-gradient(135deg, ${alpha(
-                      theme.palette.background.paper,
-                      0.7
-                    )}, ${alpha(theme.palette.background.paper, 0.6)})`,
-              backdropFilter: "blur(12px)",
+                  ? `linear-gradient(135deg, 
+                      ${alpha(theme.palette.primary.lighter, 0.08)}, 
+                      ${alpha(theme.palette.background.default, 0.9)})`
+                  : `linear-gradient(135deg, 
+                      ${alpha(theme.palette.primary.darker, 0.08)}, 
+                      ${alpha(theme.palette.background.default, 0.8)})`,
+              backdropFilter: "blur(20px)",
               boxShadow: (theme) =>
                 theme.palette.mode === "light"
-                  ? `8px 0 16px -4px ${alpha(theme.palette.grey[500], 0.08)}`
-                  : `8px 0 16px -4px ${alpha(
+                  ? `4px 0 16px -4px ${alpha(theme.palette.primary.main, 0.04)}`
+                  : `4px 0 16px -4px ${alpha(
                       theme.palette.common.black,
                       0.16
                     )}`,
-              borderRight: "none",
+              borderRight: (theme) =>
+                `1px solid ${alpha(
+                  theme.palette.mode === "light"
+                    ? theme.palette.grey[200]
+                    : theme.palette.common.white,
+                  0.08
+                )}`,
+              "&::before": {
+                content: '""',
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backdropFilter: "blur(20px)",
+                pointerEvents: "none",
+              },
             },
           }}
           open
@@ -622,26 +651,34 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
               paddingLeft: siderCollapsed ? 0 : "16px",
               paddingRight: siderCollapsed ? 0 : "8px",
               borderRadius: 0,
+              position: "relative",
+              overflow: "hidden",
+              background: (theme) =>
+                `linear-gradient(135deg, 
+                  ${alpha(theme.palette.primary.lighter, 0.12)}, 
+                  ${alpha(theme.palette.background.default, 0.95)})`,
+              backdropFilter: "blur(20px)",
+              "&::before": {
+                content: '""',
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                background: (theme) =>
+                  `linear-gradient(135deg, 
+                    ${alpha(theme.palette.primary.lighter, 0.05)}, 
+                    ${alpha(theme.palette.primary.main, 0.02)})`,
+                opacity: 0.4,
+                transition: "opacity 0.3s ease",
+              },
+              "&:hover::before": {
+                opacity: 0.6,
+              },
+              boxShadow: (theme) =>
+                `0 1px 2px ${alpha(theme.palette.primary.main, 0.08)}`,
               borderBottom: (theme) =>
                 `1px solid ${alpha(theme.palette.divider, 0.08)}`,
-              background: (theme) =>
-                theme.palette.mode === "light"
-                  ? `linear-gradient(135deg, ${alpha(
-                      theme.palette.background.paper,
-                      0.95
-                    )}, ${alpha(theme.palette.background.paper, 0.85)})`
-                  : `linear-gradient(135deg, ${alpha(
-                      theme.palette.background.paper,
-                      0.8
-                    )}, ${alpha(theme.palette.background.paper, 0.7)})`,
-              backdropFilter: "blur(12px)",
-              boxShadow: (theme) =>
-                `0 1px 8px -4px ${alpha(
-                  theme.palette.mode === "light"
-                    ? theme.palette.grey[500]
-                    : theme.palette.common.black,
-                  0.12
-                )}`,
             }}
           >
             <RenderToTitle collapsed={siderCollapsed} />
@@ -650,17 +687,39 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
                 size="small"
                 onClick={() => setSiderCollapsed(true)}
                 sx={{
+                  position: "relative",
                   transition: "all 0.2s ease",
+                  background: (theme) =>
+                    alpha(theme.palette.primary.main, 0.04),
+                  backdropFilter: "blur(20px)",
                   "&:hover": {
-                    bgcolor: (theme) => alpha(theme.palette.primary.main, 0.08),
-                    transform: "scale(1.1)",
+                    background: (theme) =>
+                      alpha(theme.palette.primary.main, 0.08),
+                    transform: "scale(1.1) rotate(-4deg)",
                     "& svg": {
                       color: "primary.main",
+                      transform: "rotate(4deg)",
                     },
+                  },
+                  "&::before": {
+                    content: '""',
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    borderRadius: "50%",
+                    boxShadow: (theme) =>
+                      `0 0 12px ${alpha(theme.palette.primary.main, 0.2)}`,
+                    opacity: 0,
+                    transition: "opacity 0.2s ease",
+                  },
+                  "&:hover::before": {
+                    opacity: 1,
                   },
                 }}
               >
-                <ChevronLeft />
+                <ChevronLeft sx={{ transition: "transform 0.2s ease" }} />
               </IconButton>
             )}
           </Paper>
