@@ -103,7 +103,6 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
       },
     },
     text: {
-      fontSize: "0.875rem",
       fontWeight: 500,
       transition: "all 0.3s ease",
       letterSpacing: "0.015em",
