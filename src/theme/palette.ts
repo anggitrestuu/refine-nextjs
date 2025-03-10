@@ -1,10 +1,16 @@
-import { alpha } from '@mui/material/styles';
+import { alpha } from "@mui/material/styles";
 
 // ----------------------------------------------------------------------
 
-export type ColorSchema = 'primary' | 'secondary' | 'info' | 'success' | 'warning' | 'error';
+export type ColorSchema =
+  | "primary"
+  | "secondary"
+  | "info"
+  | "success"
+  | "warning"
+  | "error";
 
-declare module '@mui/material/styles/createPalette' {
+declare module "@mui/material/styles/createPalette" {
   interface TypeBackground {
     neutral: string;
   }
@@ -21,74 +27,74 @@ declare module '@mui/material/styles/createPalette' {
 // SETUP COLORS
 
 const GREY = {
-  0: '#FFFFFF',
-  100: '#F9FAFB',
-  200: '#F4F6F8',
-  300: '#DFE3E8',
-  400: '#C4CDD5',
-  500: '#919EAB',
-  600: '#637381',
-  700: '#454F5B',
-  800: '#212B36',
-  900: '#161C24',
+  0: "#FFFFFF",
+  100: "#F9FAFB",
+  200: "#F4F6F8",
+  300: "#DFE3E8",
+  400: "#C4CDD5",
+  500: "#919EAB",
+  600: "#637381",
+  700: "#454F5B",
+  800: "#212B36",
+  900: "#161C24",
 };
 
 const PRIMARY = {
-  lighter: '#C8FACD',
-  light: '#5BE584',
-  main: '#00AB55',
-  dark: '#007B55',
-  darker: '#005249',
-  contrastText: '#FFFFFF',
+  lighter: "#E3F2FD",
+  light: "#90CAF9",
+  main: "#2196F3",
+  dark: "#1976D2",
+  darker: "#0D47A1",
+  contrastText: "#FFFFFF",
 };
 
 const SECONDARY = {
-  lighter: '#D6E4FF',
-  light: '#84A9FF',
-  main: '#3366FF',
-  dark: '#1939B7',
-  darker: '#091A7A',
-  contrastText: '#FFFFFF',
+  lighter: "#FCE4EC",
+  light: "#F48FB1",
+  main: "#EC407A",
+  dark: "#D81B60",
+  darker: "#AD1457",
+  contrastText: "#FFFFFF",
 };
 
 const INFO = {
-  lighter: '#CAFDF5',
-  light: '#61F3F3',
-  main: '#00B8D9',
-  dark: '#006C9C',
-  darker: '#003768',
-  contrastText: '#FFFFFF',
+  lighter: "#E8F4FD",
+  light: "#64B5F6",
+  main: "#2196F3",
+  dark: "#1976D2",
+  darker: "#0D47A1",
+  contrastText: "#FFFFFF",
 };
 
 const SUCCESS = {
-  lighter: '#D8FBDE',
-  light: '#86E8AB',
-  main: '#36B37E',
-  dark: '#1B806A',
-  darker: '#0A5554',
-  contrastText: '#FFFFFF',
+  lighter: "#E8F5E9",
+  light: "#81C784",
+  main: "#4CAF50",
+  dark: "#388E3C",
+  darker: "#1B5E20",
+  contrastText: "#FFFFFF",
 };
 
 const WARNING = {
-  lighter: '#FFF5CC',
-  light: '#FFD666',
-  main: '#FFAB00',
-  dark: '#B76E00',
-  darker: '#7A4100',
+  lighter: "#FFF3E0",
+  light: "#FFB74D",
+  main: "#FF9800",
+  dark: "#F57C00",
+  darker: "#E65100",
   contrastText: GREY[800],
 };
 
 const ERROR = {
-  lighter: '#FFE9D5',
-  light: '#FFAC82',
-  main: '#FF5630',
-  dark: '#B71D18',
-  darker: '#7A0916',
-  contrastText: '#FFFFFF',
+  lighter: "#FFEBEE",
+  light: "#EF9A9A",
+  main: "#F44336",
+  dark: "#D32F2F",
+  darker: "#B71C1C",
+  contrastText: "#FFFFFF",
 };
 
 const COMMON = {
-  common: { black: '#000000', white: '#FFFFFF' },
+  common: { black: "#000000", white: "#FFFFFF" },
   primary: PRIMARY,
   secondary: SECONDARY,
   info: INFO,
@@ -108,16 +114,20 @@ const COMMON = {
   },
 };
 
-export default function palette(themeMode: 'light' | 'dark') {
+export default function palette(themeMode: "light" | "dark") {
   const light = {
     ...COMMON,
-    mode: 'light',
+    mode: "light",
     text: {
       primary: GREY[800],
       secondary: GREY[600],
       disabled: GREY[500],
     },
-    background: { paper: '#FFFFFF', default: '#FFFFFF', neutral: GREY[200] },
+    background: {
+      paper: "#FFFFFF",
+      default: "#F8F9FA",
+      neutral: alpha(GREY[200], 0.8),
+    },
     action: {
       ...COMMON.action,
       active: GREY[600],
@@ -126,15 +136,15 @@ export default function palette(themeMode: 'light' | 'dark') {
 
   const dark = {
     ...COMMON,
-    mode: 'dark',
+    mode: "dark",
     text: {
-      primary: '#FFFFFF',
+      primary: "#FFFFFF",
       secondary: GREY[500],
       disabled: GREY[600],
     },
     background: {
-      paper: GREY[800],
-      default: GREY[900],
+      paper: "#1A2027",
+      default: "#0A1929",
       neutral: alpha(GREY[500], 0.16),
     },
     action: {
@@ -143,5 +153,5 @@ export default function palette(themeMode: 'light' | 'dark') {
     },
   } as const;
 
-  return themeMode === 'light' ? light : dark;
+  return themeMode === "light" ? light : dark;
 }

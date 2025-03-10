@@ -36,7 +36,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Paper from "@mui/material/Paper";
 import Tooltip from "@mui/material/Tooltip";
 import type { RefineThemedLayoutV2SiderProps } from "@refinedev/mui";
-import { alpha, Divider, useTheme } from "@mui/material";
+import { alpha, Divider, useTheme, Theme } from "@mui/material";
 
 export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
   Title: TitleFromProps,
@@ -60,33 +60,111 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
 
   const menuItemStyles = {
     button: {
-      py: 1.25,
-      px: 2,
-      mx: 1,
+      py: 1.75,
+      px: 3,
+      mx: 2,
       my: 0.5,
-      borderRadius: "10px",
-      transition: "all 0.2s ease",
+      borderRadius: "16px",
+      transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+      position: "relative",
+      overflow: "hidden",
+      "&::before": {
+        content: '""',
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        opacity: 0,
+        transition: "opacity 0.3s ease",
+        background: (theme: Theme) =>
+          `radial-gradient(circle at center, ${alpha(
+            theme.palette.primary.main,
+            0.1
+          )} 0%, ${alpha(theme.palette.primary.main, 0.05)} 100%)`,
+      },
       "&:hover": {
-        bgcolor: alpha(theme.palette.text.primary, 0.05),
-        transform: "translateX(4px)",
+        transform: "translateX(4px) scale(1.01)",
+        "&::before": {
+          opacity: 1,
+        },
+        "& .MuiListItemIcon-root": {
+          transform: "scale(1.1) rotate(5deg)",
+          color: "primary.main",
+          filter: "drop-shadow(0 0 8px rgba(0, 0, 0, 0.2))",
+        },
+        "& .MuiListItemText-primary": {
+          background: (theme: Theme) =>
+            `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          textShadow: "0 0 20px rgba(0, 0, 0, 0.1)",
+        },
       },
       "&.Mui-selected": {
-        bgcolor: alpha(theme.palette.primary.main, 0.2),
-        color: theme.palette.primary.main,
+        background: (theme: Theme) =>
+          `linear-gradient(135deg, ${alpha(
+            theme.palette.primary.light,
+            0.15
+          )}, ${alpha(theme.palette.primary.main, 0.15)})`,
+        boxShadow: (theme: Theme) =>
+          `0 0 20px ${alpha(
+            theme.palette.primary.main,
+            0.15
+          )}, inset 0 0 8px ${alpha(theme.palette.primary.light, 0.2)}`,
+        backdropFilter: "blur(20px)",
+        "&::before": {
+          opacity: 1,
+          background: (theme: Theme) =>
+            `radial-gradient(circle at center, ${alpha(
+              theme.palette.primary.main,
+              0.15
+            )} 0%, ${alpha(theme.palette.primary.main, 0.1)} 100%)`,
+        },
         "&:hover": {
-          bgcolor: alpha(theme.palette.primary.main, 0.3),
-          transform: "translateX(4px)",
+          transform: "translateX(4px) scale(1.01)",
+          background: (theme: Theme) =>
+            `linear-gradient(135deg, ${alpha(
+              theme.palette.primary.light,
+              0.2
+            )}, ${alpha(theme.palette.primary.main, 0.2)})`,
+          boxShadow: (theme: Theme) =>
+            `0 0 25px ${alpha(
+              theme.palette.primary.main,
+              0.2
+            )}, inset 0 0 12px ${alpha(theme.palette.primary.light, 0.3)}`,
+        },
+        "& .MuiListItemIcon-root": {
+          color: "primary.main",
+          transform: "scale(1.1)",
+          filter: "drop-shadow(0 0 8px rgba(0, 0, 0, 0.2))",
+        },
+        "& .MuiListItemText-primary": {
+          fontWeight: 700,
+          background: (theme: Theme) =>
+            `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          textShadow: "0 0 20px rgba(0, 0, 0, 0.1)",
         },
       },
     },
     icon: {
       justifyContent: "center",
-      transition: "all 0.2s ease",
-      minWidth: "24px",
+      transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+      minWidth: "28px",
+      marginRight: "16px !important",
+      color: (theme: Theme) => alpha(theme.palette.text.primary, 0.7),
+      "& svg": {
+        fontSize: "1.3rem",
+        transition: "transform 0.3s ease",
+      },
     },
     text: {
-      fontWeight: 500,
-      transition: "opacity 0.3s ease",
+      fontWeight: 600,
+      transition: "all 0.3s ease",
+      fontSize: "0.9rem",
+      letterSpacing: "0.015em",
     },
   };
 
@@ -172,12 +250,16 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
                     ...menuItemStyles.button,
                     pl: isNested ? 4 : 2,
                     bgcolor: isOpen ? "action.hover" : "transparent",
+                    "& .MuiListItemIcon-root": {
+                      ...menuItemStyles.icon,
+                      marginRight: siderCollapsed
+                        ? "0px !important"
+                        : "16px !important",
+                    },
                   }}
                 >
                   <ListItemIcon
                     sx={{
-                      ...menuItemStyles.icon,
-                      marginRight: siderCollapsed ? "0px" : "12px",
                       color: isOpen
                         ? "primary.main"
                         : theme.palette.primary.main,
@@ -252,12 +334,16 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
               sx={{
                 ...menuItemStyles.button,
                 pl: isNested ? 4 : 2,
+                "& .MuiListItemIcon-root": {
+                  ...menuItemStyles.icon,
+                  marginRight: siderCollapsed
+                    ? "0px !important"
+                    : "16px !important",
+                },
               }}
             >
               <ListItemIcon
                 sx={{
-                  ...menuItemStyles.icon,
-                  marginRight: siderCollapsed ? "0px" : "12px",
                   color: isSelected
                     ? theme.palette.primary.main
                     : theme.palette.text.primary,
@@ -297,16 +383,20 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
           sx={{
             ...menuItemStyles.button,
             color: selectedKey === "/" ? "primary.main" : "text.primary",
+            "& .MuiListItemIcon-root": {
+              ...menuItemStyles.icon,
+              marginRight: siderCollapsed
+                ? "0px !important"
+                : "16px !important",
+            },
           }}
         >
           <ListItemIcon
             sx={{
-              ...menuItemStyles.icon,
-              marginRight: siderCollapsed ? "0px" : "12px",
               color:
                 selectedKey === "/"
-                  ? "primary.main"
-                  : theme.palette.primary.main,
+                  ? theme.palette.primary.main
+                  : theme.palette.text.primary,
             }}
           >
             <Dashboard />
@@ -346,8 +436,8 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
       <Divider
         sx={{
           my: 1,
-          mx: 1,
-          bgcolor: "divider",
+          mx: 2,
+          opacity: 0.3,
         }}
       />
       <Tooltip
@@ -361,15 +451,32 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
           onClick={() => handleLogout()}
           sx={{
             ...menuItemStyles.button,
+            "&:hover": {
+              background: (theme) =>
+                `linear-gradient(135deg, ${alpha(
+                  theme.palette.error.light,
+                  0.1
+                )}, ${alpha(theme.palette.error.main, 0.1)})`,
+              "& .MuiListItemIcon-root": {
+                transform: "scale(1.1) rotate(5deg)",
+                color: "error.main",
+                filter: "drop-shadow(0 0 8px rgba(0, 0, 0, 0.2))",
+              },
+              "& .MuiListItemText-primary": {
+                color: "error.main",
+                fontWeight: 600,
+              },
+            },
+            "& .MuiListItemIcon-root": {
+              ...menuItemStyles.icon,
+              marginRight: siderCollapsed
+                ? "0px !important"
+                : "16px !important",
+              color: "error.main",
+            },
           }}
         >
-          <ListItemIcon
-            sx={{
-              ...menuItemStyles.icon,
-              marginRight: siderCollapsed ? "0px" : "12px",
-              color: "error.main",
-            }}
-          >
+          <ListItemIcon>
             <Logout />
           </ListItemIcon>
           <ListItemText
@@ -478,7 +585,26 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
             "& .MuiDrawer-paper": {
               width: drawerWidth(),
               overflow: "hidden",
-              transition: "width 200ms cubic-bezier(0.4, 0, 0.6, 1) 0ms",
+              transition: "width 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+              background: (theme) =>
+                theme.palette.mode === "light"
+                  ? `linear-gradient(135deg, ${alpha(
+                      theme.palette.background.paper,
+                      0.9
+                    )}, ${alpha(theme.palette.background.paper, 0.8)})`
+                  : `linear-gradient(135deg, ${alpha(
+                      theme.palette.background.paper,
+                      0.7
+                    )}, ${alpha(theme.palette.background.paper, 0.6)})`,
+              backdropFilter: "blur(12px)",
+              boxShadow: (theme) =>
+                theme.palette.mode === "light"
+                  ? `8px 0 16px -4px ${alpha(theme.palette.grey[500], 0.08)}`
+                  : `8px 0 16px -4px ${alpha(
+                      theme.palette.common.black,
+                      0.16
+                    )}`,
+              borderRight: "none",
             },
           }}
           open
@@ -496,9 +622,26 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
               paddingLeft: siderCollapsed ? 0 : "16px",
               paddingRight: siderCollapsed ? 0 : "8px",
               borderRadius: 0,
-              borderBottom: "1px solid",
-              borderColor: "divider",
-              bgcolor: "transparent",
+              borderBottom: (theme) =>
+                `1px solid ${alpha(theme.palette.divider, 0.08)}`,
+              background: (theme) =>
+                theme.palette.mode === "light"
+                  ? `linear-gradient(135deg, ${alpha(
+                      theme.palette.background.paper,
+                      0.95
+                    )}, ${alpha(theme.palette.background.paper, 0.85)})`
+                  : `linear-gradient(135deg, ${alpha(
+                      theme.palette.background.paper,
+                      0.8
+                    )}, ${alpha(theme.palette.background.paper, 0.7)})`,
+              backdropFilter: "blur(12px)",
+              boxShadow: (theme) =>
+                `0 1px 8px -4px ${alpha(
+                  theme.palette.mode === "light"
+                    ? theme.palette.grey[500]
+                    : theme.palette.common.black,
+                  0.12
+                )}`,
             }}
           >
             <RenderToTitle collapsed={siderCollapsed} />
@@ -507,12 +650,17 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
                 size="small"
                 onClick={() => setSiderCollapsed(true)}
                 sx={{
+                  transition: "all 0.2s ease",
                   "&:hover": {
-                    bgcolor: "action.hover",
+                    bgcolor: (theme) => alpha(theme.palette.primary.main, 0.08),
+                    transform: "scale(1.1)",
+                    "& svg": {
+                      color: "primary.main",
+                    },
                   },
                 }}
               >
-                {<ChevronLeft />}
+                <ChevronLeft />
               </IconButton>
             )}
           </Paper>
@@ -529,10 +677,18 @@ export const ThemedSiderV2: React.FC<RefineThemedLayoutV2SiderProps> = ({
               },
               "&::-webkit-scrollbar-thumb": {
                 background: (theme) =>
-                  theme.palette.mode === "light"
-                    ? "rgba(0,0,0,0.2)"
-                    : "rgba(255,255,255,0.2)",
-                borderRadius: "3px",
+                  alpha(
+                    theme.palette.primary.main,
+                    theme.palette.mode === "light" ? 0.2 : 0.3
+                  ),
+                borderRadius: "6px",
+                "&:hover": {
+                  background: (theme) =>
+                    alpha(
+                      theme.palette.primary.main,
+                      theme.palette.mode === "light" ? 0.3 : 0.4
+                    ),
+                },
               },
             }}
           >

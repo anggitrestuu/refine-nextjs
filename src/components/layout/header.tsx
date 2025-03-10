@@ -44,17 +44,22 @@ export const ThemedHeaderV2: React.FC<RefineThemedLayoutV2HeaderProps> = ({
   return (
     <AppBar
       position={prefferedSticky ? "sticky" : "relative"}
-      elevation={0}
+      elevation={scrolled ? 2 : 0}
       sx={{
-        backgroundColor: (theme) => {
+        background: (theme) => {
           const baseColor =
+            theme.palette.mode === "light" ? "#ffffff" : "#1A2027";
+          const gradientColor =
             theme.palette.mode === "light"
-              ? "#ffffff"
-              : theme.palette.background.default;
-          return scrolled ? alpha(baseColor, 0.92) : alpha(baseColor, 0); // cc = 80% opacity
+              ? alpha(theme.palette.primary.light, 0.08)
+              : alpha(theme.palette.primary.dark, 0.16);
+          return scrolled
+            ? `linear-gradient(to right, ${baseColor}, ${gradientColor})`
+            : "transparent";
         },
+        backdropFilter: scrolled ? "blur(8px)" : "none",
         color: "text.primary",
-        transition: "background-color 0.3s ease",
+        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
       }}
     >
       <Toolbar
@@ -71,22 +76,46 @@ export const ThemedHeaderV2: React.FC<RefineThemedLayoutV2HeaderProps> = ({
           sx={{
             display: "flex",
             alignItems: "center",
-            backgroundColor: "action.hover",
-            borderRadius: "8px",
+            backgroundColor: (theme) =>
+              alpha(theme.palette.background.paper, 0.8),
+            borderRadius: "12px",
             px: 2,
             mx: 2,
             flex: { xs: 1, md: 0.4 },
             maxWidth: "400px",
+            boxShadow: (theme) =>
+              `0 0 0 1px ${alpha(theme.palette.primary.main, 0.1)}`,
+            transition: "all 0.2s ease-in-out",
+            "&:hover": {
+              backgroundColor: "background.paper",
+              transform: "translateY(-1px)",
+              boxShadow: (theme) =>
+                `0 0 0 1px ${alpha(theme.palette.primary.main, 0.2)}`,
+            },
           }}
         >
-          <SearchIcon sx={{ color: "text.secondary", mr: 1 }} />
+          <SearchIcon
+            sx={{
+              color: "primary.main",
+              opacity: 0.7,
+              mr: 1,
+              transition: "opacity 0.2s ease",
+              "&:hover": {
+                opacity: 1,
+              },
+            }}
+          />
           <InputBase
             placeholder="Search..."
             sx={{
-              py: 1,
+              py: 1.5,
               flex: 1,
               "& .MuiInputBase-input": {
                 color: "text.primary",
+                "&::placeholder": {
+                  color: "text.secondary",
+                  opacity: 0.7,
+                },
               },
             }}
           />
@@ -102,8 +131,16 @@ export const ThemedHeaderV2: React.FC<RefineThemedLayoutV2HeaderProps> = ({
           <IconButton
             size="large"
             sx={{
+              background: (theme) => alpha(theme.palette.primary.main, 0.08),
+              backdropFilter: "blur(8px)",
+              borderRadius: "12px",
+              transition: "all 0.2s ease-in-out",
               "&:hover": {
-                backgroundColor: "action.hover",
+                background: (theme) => alpha(theme.palette.primary.main, 0.16),
+                transform: "translateY(-1px)",
+              },
+              "&:active": {
+                transform: "translateY(0)",
               },
             }}
           >
@@ -113,12 +150,16 @@ export const ThemedHeaderV2: React.FC<RefineThemedLayoutV2HeaderProps> = ({
               sx={{
                 "& .MuiBadge-badge": {
                   fontSize: "10px",
-                  height: "16px",
-                  minWidth: "16px",
+                  height: "18px",
+                  minWidth: "18px",
+                  background: (theme) =>
+                    `linear-gradient(135deg, ${theme.palette.error.main}, ${theme.palette.error.dark})`,
+                  border: "2px solid",
+                  borderColor: "background.paper",
                 },
               }}
             >
-              <NotificationsIcon />
+              <NotificationsIcon color="primary" />
             </Badge>
           </IconButton>
 
@@ -152,10 +193,20 @@ export const ThemedHeaderV2: React.FC<RefineThemedLayoutV2HeaderProps> = ({
                 src={user?.avatar}
                 alt={user?.name}
                 sx={{
-                  width: 40,
-                  height: 40,
+                  width: 42,
+                  height: 42,
                   border: "2px solid",
                   borderColor: "primary.main",
+                  background: (theme) =>
+                    `linear-gradient(135deg, ${theme.palette.primary.light}, ${theme.palette.primary.main})`,
+                  boxShadow: (theme) =>
+                    `0 0 0 4px ${alpha(theme.palette.primary.main, 0.16)}`,
+                  transition: "all 0.2s ease-in-out",
+                  "&:hover": {
+                    transform: "scale(1.05)",
+                    boxShadow: (theme) =>
+                      `0 0 0 4px ${alpha(theme.palette.primary.main, 0.24)}`,
+                  },
                 }}
               />
             )}
