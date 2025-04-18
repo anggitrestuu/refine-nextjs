@@ -8,9 +8,11 @@
   "scripts": {
     "dev": "cross-env NODE_OPTIONS=--max_old_space_size=2048 refine dev",
     "build": "refine build",
+    "build:analyze": "cross-env ANALYZE=true refine build",
     "start": "refine start",
     "lint": "next lint",
-    "refine": "refine"
+    "refine": "refine",
+    "clean": "rm -rf .next"
   },
   "dependencies": {
     "@emotion/react": "^11.8.2",
@@ -37,12 +39,14 @@
     "simplebar-react": "^3.3.0"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^15.3.1",
     "@types/js-cookie": "^3.0.6",
     "@types/lodash": "^4.17.16",
     "@types/node": "^18.16.2",
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "@typescript-eslint/parser": "^6.21.0",
+    "critters": "^0.0.25",
     "cross-env": "^7.0.3",
     "eslint": "^8",
     "eslint-config-next": "^14.1.0",
