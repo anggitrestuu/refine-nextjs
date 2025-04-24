@@ -1,4 +1,4 @@
-import { Public_Sans, Barlow } from "next/font/google";
+import { Barlow, Inter } from "next/font/google";
 import { ThemeFontSizeValue } from "../components/settings/types";
 
 // ----------------------------------------------------------------------
@@ -39,7 +39,7 @@ export function responsiveFontSizes({
   };
 }
 
-export const primaryFont = Public_Sans({
+export const primaryFont = Inter({
   weight: ["400", "500", "600", "700", "800"],
   subsets: ["latin"],
   display: "swap",
