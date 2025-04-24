@@ -8,6 +8,8 @@ import { SimpleLayoutTransition } from '@/components/SimpleLayoutTransition'
 import { StandardLayoutRenderer } from '@/components/StandardLayout/StandardLayoutRenderer'
 import { renderComponent } from '@/components/StandardLayout/StandardLayoutSlot'
 import React, { useState, useCallback } from 'react'
+import { Box, Paper } from '@mui/material'
+import { alpha, useTheme } from '@mui/material/styles'
 
 /**
  * Options for the useLayoutTransition hook
@@ -69,6 +71,7 @@ export function useLayoutTransition({
   componentRegistry,
   className = '',
 }: UseLayoutTransitionOptions): UseLayoutTransitionResult {
+  const theme = useTheme();
   // Current layout state
   const [currentLayout, setCurrentLayout] = useState(initialLayout)
   const [previousLayout, setPreviousLayout] =
@@ -117,7 +120,7 @@ export function useLayoutTransition({
   // Create a component to render the current layout with transitions
   const LayoutRenderer = useCallback(() => {
     return (
-      <div className="h-full w-full relative">
+      <Box sx={{ height: '100%', width: '100%', position: 'relative' }}>
         {/* When not transitioning, use the standard renderer */}
         {!isTransitioning && (
           <StandardLayoutRenderer
@@ -135,45 +138,64 @@ export function useLayoutTransition({
             duration={duration}
             className={className}
             renderSlotComponent={({ slotDef, slotNumber }) => {
-              // Render the actual component from the registry
               const componentId = slotDef.component?.componentId
               if (!componentId || !componentRegistry[componentId]) return null
 
               const Component = componentRegistry[componentId]
 
               return (
-                <div className="h-full w-full flex flex-col">
+                <Box sx={{
+                  height: '100%',
+                  width: '100%',
+                  display: 'flex',
+                  flexDirection: 'column'
+                }}>
                   {/* Header component if available */}
                   {slotDef.headerComponent?.componentId && (
-                    <div className="flex-none border-b border-border-light dark:border-border-dark h-16 bg-surface-light/80 dark:bg-surface-mid/80 backdrop-blur-sm">
+                    <Paper
+                      elevation={0}
+                      sx={{
+                        flexShrink: 0,
+                        borderBottom: `1px solid ${theme.palette.divider}`,
+                        height: 64,
+                        bgcolor: (theme) =>
+                          theme.palette.mode === 'light'
+                            ? alpha(theme.palette.background.default, 0.8)
+                            : alpha(theme.palette.background.default, 0.8),
+                        backdropFilter: 'blur(8px)'
+                      }}
+                    >
                       {renderComponent(
                         slotDef.headerComponent.componentId,
                         componentRegistry,
                         slotDef,
                       )}
-                    </div>
+                    </Paper>
                   )}
 
-                  <div className="flex-1 overflow-auto">
+                  <Box sx={{
+                    flexGrow: 1,
+                    overflow: 'auto'
+                  }}>
                     <Component slot={slotDef} />
-                  </div>
+                  </Box>
 
                   {/* Footer component if available */}
                   {slotDef.footerComponent?.componentId && (
-                    <div className="flex-none">
+                    <Box sx={{ flexShrink: 0 }}>
                       {renderComponent(
                         slotDef.footerComponent.componentId,
                         componentRegistry,
                         slotDef,
                       )}
-                    </div>
+                    </Box>
                   )}
-                </div>
+                </Box>
               )
             }}
           />
         )}
-      </div>
+      </Box>
     )
   }, [
     isTransitioning,
@@ -183,6 +205,7 @@ export function useLayoutTransition({
     handleTransitionComplete,
     duration,
     className,
+    theme,
   ])
 
   // Create an enhanced registry that can be used to pass layout switching functions

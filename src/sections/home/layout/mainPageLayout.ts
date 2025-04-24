@@ -1,13 +1,9 @@
 const mainPageLayout: FlexboxLayoutDefinition = {
   slots: [
     {
-      id: "agent-container",
+      id: "empty-left",
       slotNumber: 0,
       width: "25%",
-      component: {
-        componentId: "agent-container",
-        title: "Agent",
-      },
     },
     {
       id: "chat-container",
@@ -19,12 +15,12 @@ const mainPageLayout: FlexboxLayoutDefinition = {
       },
     },
     {
-      id: "canvas-container",
+      id: "quick-options",
       slotNumber: 2,
       width: "25%",
       component: {
-        componentId: "canvas-container",
-        title: "Buttons",
+        componentId: "quick-options",
+        title: "Quick Options",
       },
     },
   ],

@@ -3,9 +3,10 @@
  * @module src/shared/ui/StandardLayout/StandardLayoutSlot
  */
 
-import React from 'react'
-import type { ParsedStandardSlot } from '../../lib/layout/standardParseLayout'
-import type { StandardLayoutSlotProps } from './types'
+import React from 'react';
+import { Box, Paper } from '@mui/material';
+import type { ParsedStandardSlot } from '../../lib/layout/standardParseLayout';
+import type { StandardLayoutSlotProps } from './types';
 
 /**
  * StandardLayoutSlot component for rendering a single slot in the layout
@@ -14,41 +15,62 @@ export function StandardLayoutSlot({
   slot,
   componentRegistry,
 }: StandardLayoutSlotProps) {
-  const componentId = slot.component?.componentId
-  const Component = componentId ? componentRegistry[componentId] : null
+  const componentId = slot.component?.componentId;
+  const Component = componentId ? componentRegistry[componentId] : null;
 
   return (
-    <div
-      className="flex flex-col h-full"
-      style={{ width: slot.width }}
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        width: slot.width,
+      }}
       data-slot-number={slot.slotNumber}
       data-depth={slot.depth}
     >
       {slot.headerComponent?.componentId && (
-        <div className="flex-none border-b border-border-light dark:border-border-dark h-16 bg-surface-light/80 dark:bg-surface-mid/80 backdrop-blur-sm">
+        <Paper
+          elevation={0}
+          sx={{
+            flexShrink: 0,
+            height: 64, // equivalent to h-16
+            borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
+            bgcolor: (theme) =>
+              theme.palette.mode === 'light'
+                ? 'rgba(255, 255, 255, 0.8)'
+                : 'rgba(26, 32, 39, 0.8)',
+            backdropFilter: 'blur(8px)',
+          }}
+        >
           {renderComponent(
             slot.headerComponent.componentId,
             componentRegistry,
             slot,
           )}
-        </div>
+        </Paper>
       )}
 
-      <div className="flex-1 overflow-auto">
+      <Box
+        sx={{
+          flexGrow: 1,
+          overflow: 'auto',
+        }}
+      >
         {Component ? <Component slot={slot} /> : null}
-      </div>
+      </Box>
 
       {slot.footerComponent?.componentId && (
-        <div className="flex-none">
+        <Box sx={{ flexShrink: 0 }}>
           {renderComponent(
             slot.footerComponent.componentId,
             componentRegistry,
             slot,
           )}
-        </div>
+        </Box>
       )}
-    </div>
-  )
+    </Box>
+  );
 }
 
 /**
@@ -59,8 +81,8 @@ export function renderComponent(
   componentRegistry: Record<string, React.ComponentType<any>>,
   slot: ParsedStandardSlot,
 ) {
-  const Component = componentRegistry[componentId]
+  const Component = componentRegistry[componentId];
   return Component ? (
     <Component slot={slot} componentRegistry={componentRegistry} />
-  ) : null
+  ) : null;
 }

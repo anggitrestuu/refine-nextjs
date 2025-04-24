@@ -1,7 +1,7 @@
 'use client'
 
 
-import { HomePageLayout } from '@/sections/home/HomePageLayout'
+import { HomeContainer } from '@sections/home/HomeContainer'
 import { Box } from '@mui/material'
 import React from 'react'
 
@@ -12,7 +12,7 @@ const MainPageHome: React.FC = () => (
       height: '100vh',
       width: '100vw',
     }}>
-    <HomePageLayout />
+    <HomeContainer />
   </Box>
 )
 
