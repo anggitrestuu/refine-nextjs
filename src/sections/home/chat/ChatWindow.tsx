@@ -7,7 +7,20 @@ import ChatInput from './ChatInput';
 import { Message } from './types';
 
 const ChatWindow: React.FC = () => {
-    const [messages, setMessages] = useState<Message[]>([]);
+    const [messages, setMessages] = useState<Message[]>([
+        {
+            id: '1',
+            sender: 'ai',
+            text: 'Hello! How can I assist you today?sadasdasda asdhaskldjalskd ashdkasdhkajsdh asdhkasjdhakjshd ahsdjkahsd',
+            timestamp: new Date(),
+        },
+        {
+            id: '2',
+            sender: 'user',
+            text: 'Hi, I need help with my order.',
+            timestamp: new Date(),
+        },
+    ]);
 
     const handleSend = (text: string) => {
         const userMsg: Message = {
@@ -36,7 +49,10 @@ const ChatWindow: React.FC = () => {
                 display: 'flex',
                 flexDirection: 'column',
                 height: '100vh',
-                bgcolor: 'background.default',
+                bgcolor: 'primary.lighter',
+                borderRadius: 1,
+                border: 1,
+                borderColor: 'border.main',
             }}
         >
             <ChatHeader

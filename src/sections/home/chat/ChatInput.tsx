@@ -33,7 +33,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSend }) => {
             }}
             sx={{
                 borderTop: 1,
-                borderColor: 'divider',
+                borderColor: 'border.main',
                 p: 1,
                 display: 'flex',
                 alignItems: 'center',
@@ -48,7 +48,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSend }) => {
                 maxRows={4}
                 variant="outlined"
                 fullWidth
-                InputProps={{ sx: { borderRadius: 1.5, bgcolor: 'background.paper' } }}
+                InputProps={{ sx: { borderRadius: 1.5, bgcolor: 'primary.lighter', borderColor: 'border.main' } }}
             />
             <IconButton type="submit" sx={{ ml: 1 }} color="primary">
                 <SendIcon />

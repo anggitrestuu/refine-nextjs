@@ -13,10 +13,9 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ title, subtitle }) => (
             borderBottom: 1,
             borderColor: 'divider',
             p: 2,
-            bgcolor: 'background.paper',
         }}
     >
-        <Typography variant="h6">{title}</Typography>
+        <Typography variant="subtitle1">{title}</Typography>
         {subtitle && (
             <Typography variant="body2" color="text.secondary">
                 {subtitle}

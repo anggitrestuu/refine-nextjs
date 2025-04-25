@@ -22,6 +22,21 @@ declare module "@mui/material/styles/createPalette" {
     lighter: string;
     darker: string;
   }
+  // Tambahkan interface baru untuk border
+  interface Palette {
+    border: {
+      main: string;
+      light: string;
+      dark: string;
+    }
+  }
+  interface PaletteOptions {
+    border?: {
+      main: string;
+      light: string;
+      dark: string;
+    }
+  }
 }
 
 // SETUP COLORS
@@ -39,21 +54,22 @@ const GREY = {
   900: "#161C24",
 };
 
+
 const PRIMARY = {
-  lighter: "#E3F2FD",
-  light: "#90CAF9",
-  main: "#2196F3",
-  dark: "#1976D2",
-  darker: "#0D47A1",
+  lighter: "#f5f0e6",
+  light: "#8fb19b",
+  main: "#739e82",
+  dark: "#506e5b",
+  darker: "#0D47A1", // TODO : Adjust later
   contrastText: "#FFFFFF",
 };
 
 const SECONDARY = {
-  lighter: "#FCE4EC",
-  light: "#F48FB1",
-  main: "#EC407A",
-  dark: "#D81B60",
-  darker: "#AD1457",
+  lighter: "#FCE4EC", // TODO : Adjust later
+  light: "#d39676",
+  main: "#c87c54",
+  dark: "#8c563a",
+  darker: "#AD1457", // TODO : Adjust later
   contrastText: "#FFFFFF",
 };
 
@@ -119,14 +135,19 @@ export default function palette(themeMode: "light" | "dark") {
     ...COMMON,
     mode: "light",
     text: {
-      primary: GREY[800],
-      secondary: GREY[600],
-      disabled: GREY[500],
+      primary: "#33302e",
+      secondary: "#5f5b57",
+      disabled: GREY[600],
     },
     background: {
       paper: "#FFFFFF",
       default: "#F8F9FA",
       neutral: alpha(GREY[200], 0.8),
+    },
+    border: {
+      main: "#d8cbb0",
+      light: alpha(GREY[500], 0.16),
+      dark: "#bdb09a",
     },
     action: {
       ...COMMON.action,
@@ -146,6 +167,11 @@ export default function palette(themeMode: "light" | "dark") {
       paper: "#1A2027",
       default: "#0A1929",
       neutral: alpha(GREY[500], 0.16),
+    },
+    border: {
+      main: alpha(GREY[500], 0.32),
+      light: alpha(GREY[500], 0.24),
+      dark: alpha(GREY[500], 0.48),
     },
     action: {
       ...COMMON.action,
