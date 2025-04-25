@@ -49,7 +49,7 @@ const ChatWindow: React.FC = () => {
                 display: 'flex',
                 flexDirection: 'column',
                 height: '100vh',
-                bgcolor: 'primary.lighter',
+                bgcolor: 'background.surface',
                 borderRadius: 1,
                 border: 1,
                 borderColor: 'border.main',

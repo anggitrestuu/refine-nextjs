@@ -47,7 +47,7 @@ const MessageBubble: React.FC<{ message: Message; isUser: boolean }> = ({ messag
         sx={{
             p: 1.5,
             maxWidth: '85%', // Tambahkan maxWidth untuk membatasi lebar bubble
-            bgcolor: "primary.lighter",
+            bgcolor: "background.paper",
             borderRadius: isUser ? '8px 8px 0 8px' : '8px 8px 8px 0',
             borderColor: 'primary.main',
             zIndex: 2,
