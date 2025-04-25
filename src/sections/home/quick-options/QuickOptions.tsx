@@ -4,6 +4,9 @@ import SmartToyIcon from '@mui/icons-material/SmartToy';
 import HomeIcon from '@mui/icons-material/Home';
 import GroupIcon from '@mui/icons-material/Group';
 import OptionButton from './OptionButton';
+import aiGalleryLayout from '../layout/aiGalleryLayout';
+import mainPageLayout from '../layout/mainPageLayout';
+import { useLayoutStore } from '@/hooks/useLayoutStore';
 
 export interface QuickOption {
     icon: React.ReactNode;
@@ -11,50 +14,55 @@ export interface QuickOption {
     onClick?: () => void;
 }
 
-const OPTIONS: QuickOption[] = [
-    {
-        icon: <SmartToyIcon fontSize="large" />,
-        label: 'Talk to AI',
-        onClick: () => {
-            console.log('Talk to AI clicked');
-        },
-    },
-    {
-        icon: <HomeIcon fontSize="large" />,
-        label: 'Workroom',
-        onClick: () => {
-            console.log('Workroom clicked');
-        },
-    },
-    {
-        icon: <GroupIcon fontSize="large" />,
-        label: 'Organization',
-        onClick: () => {
-            console.log('Organization clicked');
-        },
-    },
-];
+const QuickOptions: React.FC = () => {
+    const { switchToLayout } = useLayoutStore();
 
-const QuickOptions: React.FC = () => (
-    <Box
-        sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: 10,
-            justifyContent: 'center',
-            height: '100%',
-        }}
-    >
-        {OPTIONS.map((opt) => (
-            <OptionButton
-                key={opt.label}
-                icon={opt.icon}
-                label={opt.label}
-                onClick={opt.onClick}
-            />
-        ))}
-    </Box>
-);
+    const OPTIONS: QuickOption[] = [
+        {
+            icon: <SmartToyIcon fontSize="large" />,
+            label: 'Talk to AI',
+            onClick: () => {
+                switchToLayout(aiGalleryLayout);
+            },
+        },
+        {
+            icon: <HomeIcon fontSize="large" />,
+            label: 'Workroom',
+            onClick: () => {
+                switchToLayout(mainPageLayout);
+            },
+        },
+        {
+            icon: <GroupIcon fontSize="large" />,
+            label: 'Organization',
+            onClick: () => {
+                // Tambahkan layout untuk Organization jika ada
+                console.log('Organization clicked');
+            },
+        },
+    ];
+
+    return (
+        <Box
+            sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: 10,
+                justifyContent: 'center',
+                height: '100%',
+            }}
+        >
+            {OPTIONS.map((opt) => (
+                <OptionButton
+                    key={opt.label}
+                    icon={opt.icon}
+                    label={opt.label}
+                    onClick={opt.onClick}
+                />
+            ))}
+        </Box>
+    );
+};
 
 export default QuickOptions;

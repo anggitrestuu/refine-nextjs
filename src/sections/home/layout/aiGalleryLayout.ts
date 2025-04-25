@@ -10,15 +10,11 @@ const aiGalleryLayout: FlexboxLayoutDefinition = {
             },
         },
         {
-            id: 'ai-gallery',
+            id: 'agent-gallery',
             slotNumber: 2,
             width: '65%',
-            headerComponent: {
-                componentId: 'back-button',
-                title: 'Back',
-            },
             component: {
-                componentId: 'aiAgentGallery',
+                componentId: 'agent-gallery',
                 title: 'AI Agents',
             },
         },

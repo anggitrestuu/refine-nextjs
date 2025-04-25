@@ -7,18 +7,15 @@
 import { SimpleLayoutTransition } from '@/components/SimpleLayoutTransition'
 import { StandardLayoutRenderer } from '@/components/StandardLayout/StandardLayoutRenderer'
 import { renderComponent } from '@/components/StandardLayout/StandardLayoutSlot'
-import React, { useState, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import { Box, Paper } from '@mui/material'
 import { alpha, useTheme } from '@mui/material/styles'
+import { useLayoutStore } from './useLayoutStore'
 
 /**
  * Options for the useLayoutTransition hook
  */
 interface UseLayoutTransitionOptions {
-  /**
-   * Initial layout to display
-   */
-  initialLayout: FlexboxLayoutDefinition
   /**
    * Duration of the transition animation in milliseconds
    */
@@ -66,56 +63,23 @@ interface UseLayoutTransitionResult {
  * @returns Functions and state for managing layout transitions
  */
 export function useLayoutTransition({
-  initialLayout,
   duration = 200,
   componentRegistry,
   className = '',
 }: UseLayoutTransitionOptions): UseLayoutTransitionResult {
   const theme = useTheme();
-  // Current layout state
-  const [currentLayout, setCurrentLayout] = useState(initialLayout)
-  const [previousLayout, setPreviousLayout] =
-    useState<FlexboxLayoutDefinition | null>(null)
-  const [isTransitioning, setIsTransitioning] = useState(false)
-  const [currentVisualState, setCurrentVisualState] = useState<
-    Record<number, { left: number; width: number }>
-  >({})
-
-  // Function to switch to a new layout
-  const switchToLayout = useCallback(
-    (newLayout: FlexboxLayoutDefinition) => {
-      if (isTransitioning) return
-
-      setPreviousLayout(currentLayout)
-      setIsTransitioning(true)
-      setCurrentLayout(newLayout)
-    },
-    [currentLayout, isTransitioning],
-  )
+  const {
+    currentLayout,
+    previousLayout,
+    isTransitioning,
+    switchToLayout,
+    setIsTransitioning
+  } = useLayoutStore();
 
   // Handle transition complete
   const handleTransitionComplete = useCallback(() => {
-    setIsTransitioning(false)
-
-    // Update current visual state based on the current layout
-    const newVisualState: Record<number, { left: number; width: number }> = {}
-
-    // Calculate the positions based on the current layout
-    let currentLeft = 0
-    for (const slot of currentLayout.slots) {
-      const widthPercent = Number.parseFloat(String(slot.width)) / 100
-      const width = widthPercent * 100 // Convert to percentage units
-
-      newVisualState[slot.slotNumber] = {
-        left: currentLeft,
-        width,
-      }
-
-      currentLeft += width
-    }
-
-    setCurrentVisualState(newVisualState)
-  }, [currentLayout])
+    setIsTransitioning(false);
+  }, [setIsTransitioning]);
 
   // Create a component to render the current layout with transitions
   const LayoutRenderer = useCallback(() => {
@@ -208,14 +172,11 @@ export function useLayoutTransition({
     theme,
   ])
 
-  // Create an enhanced registry that can be used to pass layout switching functions
-  const enhancedRegistry = componentRegistry
-
   return {
     currentLayout,
     isTransitioning,
     switchToLayout,
     LayoutRenderer,
-    enhancedRegistry,
+    enhancedRegistry: componentRegistry,
   }
 }
