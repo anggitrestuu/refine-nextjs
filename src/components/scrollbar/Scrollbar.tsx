@@ -7,7 +7,7 @@ import { ScrollbarProps } from './types';
 
 // ----------------------------------------------------------------------
 
-function Scrollbar({ children, sx, ...other }: ScrollbarProps) {
+function Scrollbar({ children, sx, ref, ...other }: ScrollbarProps) {
   const userAgent = typeof navigator === 'undefined' ? 'SSR' : navigator.userAgent;
 
   const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
@@ -23,7 +23,9 @@ function Scrollbar({ children, sx, ...other }: ScrollbarProps) {
   return (
     <StyledRootScrollbar>
       <StyledScrollbar clickOnTrack={false} sx={sx} {...other}>
-        {children}
+        <div ref={ref}>
+          {children}
+        </div>
       </StyledScrollbar>
     </StyledRootScrollbar>
   );
