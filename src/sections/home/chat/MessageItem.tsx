@@ -4,6 +4,7 @@ import { Avatar, Box, Paper, Typography } from '@mui/material';
 import { Message } from './types';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { MarkdownMessage } from './MarkdownMessage';
 
 interface MessageItemProps {
     message: Message;
@@ -53,7 +54,8 @@ const MessageBubble: React.FC<{ message: Message; isUser: boolean }> = ({ messag
             boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
         }}
     >
-        <Typography variant="body2">{message.text}</Typography>
+        {/* <Typography variant="body2">{message.text}</Typography> */}
+        <MarkdownMessage content={message.text} />
         <Typography
             variant="caption"
             color="text.secondary"
