@@ -1,6 +1,6 @@
 // src/components/Chat/MessageItem.tsx
 import React from 'react';
-import { Avatar, Box, Paper, Typography } from '@mui/material';
+import { Avatar, Box, Paper, Typography, alpha } from '@mui/material';
 import { Message } from './types';
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -46,15 +46,67 @@ const MessageBubble: React.FC<{ message: Message; isUser: boolean }> = ({ messag
         elevation={1}
         sx={{
             p: 1.5,
-            maxWidth: '70%',
+            maxWidth: '85%', // Tambahkan maxWidth untuk membatasi lebar bubble
             bgcolor: "primary.lighter",
             borderRadius: isUser ? '8px 8px 0 8px' : '8px 8px 8px 0',
             borderColor: 'primary.main',
             zIndex: 2,
             boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+            overflow: 'hidden', // Tambahkan overflow hidden
+            '& pre': {
+                overflow: 'auto',
+                '&::-webkit-scrollbar': {
+                    width: '6px',
+                    height: '6px',
+                },
+                '&::-webkit-scrollbar-track': {
+                    background: 'transparent',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                    background: (theme) =>
+                        alpha(
+                            theme.palette.primary.main,
+                            theme.palette.mode === 'light' ? 0.2 : 0.3
+                        ),
+                    borderRadius: '6px',
+                    '&:hover': {
+                        background: (theme) =>
+                            alpha(
+                                theme.palette.primary.main,
+                                theme.palette.mode === 'light' ? 0.3 : 0.4
+                            ),
+                    },
+                },
+            },
+            '& table': {
+                display: 'block',
+                overflow: 'auto',
+                maxWidth: '100%',
+                '&::-webkit-scrollbar': {
+                    width: '6px',
+                    height: '6px',
+                },
+                '&::-webkit-scrollbar-track': {
+                    background: 'transparent',
+                },
+                '&::-webkit-scrollbar-thumb': {
+                    background: (theme) =>
+                        alpha(
+                            theme.palette.primary.main,
+                            theme.palette.mode === 'light' ? 0.2 : 0.3
+                        ),
+                    borderRadius: '6px',
+                    '&:hover': {
+                        background: (theme) =>
+                            alpha(
+                                theme.palette.primary.main,
+                                theme.palette.mode === 'light' ? 0.3 : 0.4
+                            ),
+                    },
+                },
+            },
         }}
     >
-        {/* <Typography variant="body2">{message.text}</Typography> */}
         <MarkdownMessage content={message.text} />
         <Typography
             variant="caption"
