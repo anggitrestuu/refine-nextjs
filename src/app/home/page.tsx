@@ -7,13 +7,7 @@ import React from 'react'
 
 
 const MainPageHome: React.FC = () => (
-  <Box
-    sx={{
-      height: '100vh',
-      width: '100vw',
-    }}>
-    <HomeContainer />
-  </Box>
+  <HomeContainer />
 )
 
 export default MainPageHome

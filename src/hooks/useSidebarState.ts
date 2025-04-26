@@ -39,7 +39,7 @@ export function useSidebarState() {
   const { isCollapsed, toggleSidebar, setSidebarCollapsed } = useSidebarStore();
 
   // Calculate the margin based on the sidebar state
-  const sidebarMargin = isCollapsed ? "3rem" : "12rem";
+  const sidebarMargin = isCollapsed ? 64 : 240;
 
   return {
     isCollapsed,

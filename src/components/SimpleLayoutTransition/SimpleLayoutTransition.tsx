@@ -145,12 +145,12 @@ export function SimpleLayoutTransition({
       className={combinedClassName}
       style={{
         display: 'flex',
-        width: `calc(100% - ${sidebarMargin})`, // Adjust width to account for sidebar margin
+        width: `calc(100% - ${sidebarMargin}px)`,
         height: '100%',
         overflow: 'hidden',
         position: 'relative',
         zIndex: 1, // Lower z-index to prevent overlapping with sidebar (z-index: 40)
-        marginLeft: sidebarMargin, // Respect the sidebar margin
+        // marginLeft: sidebarMargin, // Respect the sidebar margin
       }}
     >
       {/* Render all slots from both layouts */}
