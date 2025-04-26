@@ -1,4 +1,4 @@
-export const listAgents = [
+export const listAgents: IAgent[] = [
     {
         "name": "Code Assistant",
         "description": "Expert programmer for code generation and debugging.",
@@ -281,5 +281,20 @@ export const listAgents = [
         "visibility": "organization",
         "createdAt": "2025-04-25T12:00:08.391Z",
         "updatedAt": "2025-04-25T12:00:08.391Z"
+    }
+]
+
+export const labelValueFilterAgents = [
+    {
+        value: 'private',
+        label: 'Private'
+    },
+    {
+        value: 'public',
+        label: 'Public'
+    },
+    {
+        value: 'organization',
+        label: 'Organization'
     }
 ]

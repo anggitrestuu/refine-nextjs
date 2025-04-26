@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import mainPageLayout from "@/sections/home/layout/mainPageLayout";
+import aiGalleryLayout from "@sections/home/layout/aiGalleryLayout";
 
 interface LayoutState {
   currentLayout: FlexboxLayoutDefinition;
@@ -11,7 +12,7 @@ interface LayoutState {
 }
 
 export const useLayoutStore = create<LayoutState>((set, get) => ({
-  currentLayout: mainPageLayout,
+  currentLayout: aiGalleryLayout,
   previousLayout: null,
   isTransitioning: false,
   switchToLayout: (newLayout: FlexboxLayoutDefinition) => {

@@ -28,4 +28,6 @@ interface IAgent {
 
     /** When the agent was last updated */
     updatedAt: string | Date
+
+    sharingRules?: any[]
 }
