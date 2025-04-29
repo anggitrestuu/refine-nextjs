@@ -3,16 +3,16 @@ import { NavItem } from './types'
 
 export const MAIN_NAV_ITEMS: NavItem[] = [
   {
-    href: '/app/home',
+    href: '/home',
     title: 'Home',
     icon: <Iconify icon="eva:home-fill" />,
     ariaLabel: 'Go to home page',
   },
   {
-    href: '/app/news',
-    title: 'News',
-    icon: <Iconify icon="eva:file-text-fill" />,
-    ariaLabel: 'View latest news',
+    href: '/agents',
+    title: 'Manage Agents',
+    icon: <Iconify icon="eva:people-fill" />,
+    ariaLabel: 'Open manage agents',
   },
   {
     href: '/app/workspace?layoutId=chatWorkroomGallery',
