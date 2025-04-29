@@ -12,7 +12,7 @@ interface LayoutState {
 }
 
 export const useLayoutStore = create<LayoutState>((set, get) => ({
-  currentLayout: aiGalleryLayout,
+  currentLayout: mainPageLayout,
   previousLayout: null,
   isTransitioning: false,
   switchToLayout: (newLayout: FlexboxLayoutDefinition) => {
@@ -25,8 +25,7 @@ export const useLayoutStore = create<LayoutState>((set, get) => ({
       currentLayout: newLayout,
     });
   },
-  setIsTransitioning: (isTransitioning: boolean) =>
-    set({ isTransitioning }),
+  setIsTransitioning: (isTransitioning: boolean) => set({ isTransitioning }),
   setPreviousLayout: (layout: FlexboxLayoutDefinition | null) =>
     set({ previousLayout: layout }),
 }));
