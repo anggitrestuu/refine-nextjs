@@ -6,7 +6,7 @@ import AgentFilter from './AgentFilter';
 import AgentSkeleton from './AgentSkeleton';
 import CustomBreadcrumbs from '@components/custom-breadcrumbs';
 import Iconify from '@components/iconify';
-import { AgentCreateDialog } from './AgentCreateDialog';
+import AgentDialog from './AgentDialog';
 import { useList, useModal } from '@refinedev/core';
 import { IAgent } from './type';
 import { debounce } from 'lodash';
@@ -122,7 +122,8 @@ const AgentGallery: React.FC = () => {
                 {renderContent()}
             </Box>
 
-            <AgentCreateDialog
+            <AgentDialog
+                mode="create"
                 open={createDialogOpen}
                 onClose={handleCloseCreateDialog}
             />

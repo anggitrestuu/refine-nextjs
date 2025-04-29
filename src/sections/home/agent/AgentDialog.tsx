@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
     Dialog,
     DialogTitle,
@@ -10,7 +10,7 @@ import {
     MenuItem
 } from '@mui/material';
 import { useForm } from "@refinedev/react-hook-form";
-import { HttpError, useCreate, useList, useOne } from "@refinedev/core";
+import { HttpError, useCreate, useUpdate, useOne } from "@refinedev/core";
 
 type FormValues = {
     title: string;
@@ -24,47 +24,68 @@ type IDataCanvases = {
     canvases: string[]
 }
 
-interface AgentCreateDialogProps {
+interface AgentDialogProps {
     open: boolean;
     onClose: () => void;
+    mode: 'create' | 'edit';
+    initialData?: FormValues;
+    slug?: string;
 }
-
-
-
-export const AgentCreateDialog: React.FC<AgentCreateDialogProps> = ({
+export const AgentDialog: React.FC<AgentDialogProps> = ({
     open,
-    onClose
+    onClose,
+    mode,
+    initialData,
+    slug
 }) => {
-
-    const { mutateAsync: create } = useCreate({})
+    const { mutateAsync: create } = useCreate({});
+    const { mutateAsync: update } = useUpdate({});
 
     const {
         register,
         handleSubmit,
         formState: { errors },
-        reset
-    } = useForm<FormValues, HttpError, FormValues>();
+        reset,
+        setValue
+    } = useForm<FormValues, HttpError, FormValues>({
+        defaultValues: initialData
+    });
 
     const { data: dataModels } = useOne<string[]>({
         dataProviderName: "meridian",
         resource: "api/models",
         id: "list",
-    })
+    });
 
     const { data: dataCanvases } = useOne<IDataCanvases>({
         dataProviderName: "meridian",
         resource: "api/canvas",
         id: "list",
-    })
+    });
 
+    useEffect(() => {
+        if (initialData && mode === 'edit') {
+            Object.entries(initialData).forEach(([key, value]) => {
+                setValue(key as keyof FormValues, value);
+            });
+        }
+    }, [initialData, mode, setValue]);
 
     const onSubmit = async (data: FormValues) => {
         try {
-            await create({
-                dataProviderName: "meridian",
-                resource: "api/agents/create",
-                values: data,
-            })
+            if (mode === 'create') {
+                await create({
+                    dataProviderName: "meridian",
+                    resource: "api/agents/create",
+                    values: data,
+                });
+            } else {
+                await update({
+                    dataProviderName: "meridian",
+                    resource: `api/agents/edit/${slug}`,
+                    values: data,
+                });
+            }
 
             reset();
             onClose();
@@ -81,7 +102,9 @@ export const AgentCreateDialog: React.FC<AgentCreateDialogProps> = ({
             fullWidth
         >
             <form onSubmit={handleSubmit(onSubmit)}>
-                <DialogTitle>Create New Agent</DialogTitle>
+                <DialogTitle>
+                    {mode === 'create' ? 'Create New Agent' : 'Edit Agent'}
+                </DialogTitle>
                 <DialogContent>
                     <Stack spacing={2} sx={{ mt: 2 }}>
                         <TextField
@@ -158,10 +181,12 @@ export const AgentCreateDialog: React.FC<AgentCreateDialogProps> = ({
                 <DialogActions>
                     <Button onClick={onClose}>Cancel</Button>
                     <Button type="submit" variant="contained">
-                        Create
+                        {mode === 'create' ? 'Create' : 'Save'}
                     </Button>
                 </DialogActions>
             </form>
         </Dialog>
     );
 };
+
+export default AgentDialog;
