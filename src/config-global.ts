@@ -27,6 +27,8 @@ export const ICON = {
 // API URls
 export const API_URLS = {
   baseUrl: "https://api.fake-rest.refine.dev",
-  meridianUrl: import.meta.env.NEXT_PUBLIC_MERIDIAN_API_URL,
-  heimdallUrl: import.meta.env.NEXT_PUBLIC_HEIMDALL_API_URL,
+  meridianUrl: process.env.NEXT_PUBLIC_MERIDIAN_API_URL || "",
+  heimdallUrl: process.env.NEXT_PUBLIC_HEIMDALL_API_URL || "",
 }
+
+export const TENANT_ID = process.env.NEXT_PUBLIC_TENANT_ID || "";
