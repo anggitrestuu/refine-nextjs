@@ -1,5 +1,4 @@
-// LAYOUT
-// ----------------------------------------------------------------------
+// Layout
 
 export const HEADER = {
   H_MOBILE: 64,
@@ -24,3 +23,10 @@ export const ICON = {
   NAV_ITEM_HORIZONTAL: 22,
   NAV_ITEM_MINI: 22,
 };
+
+// API URls
+export const API_URLS = {
+  baseUrl: "https://api.fake-rest.refine.dev",
+  meridianUrl: import.meta.env.NEXT_PUBLIC_MERIDIAN_API_URL,
+  heimdallUrl: import.meta.env.NEXT_PUBLIC_HEIMDALL_API_URL,
+}

@@ -12,7 +12,7 @@ import React from "react";
 
 import routerProvider from "@refinedev/nextjs-router";
 
-import { dataProvider } from "@providers/data-provider";
+import { dataProvider } from "@providers/rest-data-provider";
 
 // scroll bar
 import "simplebar-react/dist/simplebar.min.css";
@@ -22,6 +22,7 @@ import ThemeProvider from "../theme";
 
 // components
 import { ThemeSettings, SettingsProvider } from "../components/settings";
+import { API_URLS } from "@config-global";
 
 type RefineContextProps = {
   defaultMode?: string;
@@ -118,7 +119,17 @@ const App = (props: React.PropsWithChildren<AppProps>) => {
               <RefineSnackbarProvider>
                 <Refine
                   routerProvider={routerProvider}
-                  dataProvider={dataProvider}
+                  dataProvider={{
+                    default: dataProvider(
+                      "https://api.fake-rest.refine.dev"
+                    ),
+                    meridian: dataProvider(
+                      API_URLS.meridianUrl
+                    ),
+                    heimdall: dataProvider(
+                      API_URLS.heimdallUrl
+                    ),
+                  }}
                   notificationProvider={useNotificationProvider}
                   authProvider={authProvider}
                   resources={[
