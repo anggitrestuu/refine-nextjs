@@ -1,6 +1,7 @@
 // src/features/agent/components/AgentCard.tsx
 import React from 'react';
 import { Card, CardContent, Typography, Box, Stack, Chip } from '@mui/material';
+import { IAgent } from './type';
 
 interface AgentCardProps {
     agent: IAgent;
@@ -18,16 +19,17 @@ const AgentCard: React.FC<AgentCardProps> = ({ agent }) => {
                 flex: 1,
                 display: 'flex',
                 flexDirection: 'column',
-                p: 2
+                p: 2,
+                minHeight: 200
             }}>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" mb={1}>
                     <Typography variant="h6" fontWeight={'600'}>
-                        {agent.name}
+                        {agent.title}
                     </Typography>
 
                     {/* visibility */}
                     <Chip
-                        label={agent.visibility}
+                        label={agent.list_type}
                         size="small"
                         sx={{
                             textTransform: 'capitalize',
@@ -61,7 +63,7 @@ const AgentCard: React.FC<AgentCardProps> = ({ agent }) => {
                         </Typography>
                     )}
 
-                    {agent.systemPrompt && (
+                    {/* {agent.systemPrompt && (
                         <Typography
                             variant="body2"
                             color='text.secondary'
@@ -74,7 +76,7 @@ const AgentCard: React.FC<AgentCardProps> = ({ agent }) => {
                         >
                             {agent.systemPrompt}
                         </Typography>
-                    )}
+                    )} */}
                 </Box>
             </CardContent>
         </Card>

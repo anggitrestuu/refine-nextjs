@@ -1,1 +1,1 @@
-export { default as AgentGallery } from './AgentGallery'
+export { default as AgentGallery } from "./AgentGallery";

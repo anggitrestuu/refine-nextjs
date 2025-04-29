@@ -27,14 +27,15 @@ const AgentSearch: React.FC<AgentSearchProps> = ({ onSearch }) => {
                 fullWidth
                 value={query}
                 onChange={handleSearchChange}
-                InputProps={{
-                    startAdornment: (
-                        <Box sx={{ display: 'flex', alignItems: 'center', mr: 1 }}>
-                            <Iconify height={20} width={20} icon="eva:search-fill" />
-                        </Box>
-                    ),
+                slotProps={{
+                    input: {
+                        startAdornment: (
+                            <Box sx={{ display: 'flex', alignItems: 'center', mr: 1 }}>
+                                <Iconify height={20} width={20} icon="eva:search-fill" />
+                            </Box>
+                        ),
+                    }
                 }}
-
             />
         </Box>
     );

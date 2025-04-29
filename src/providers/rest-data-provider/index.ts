@@ -6,6 +6,9 @@ import type { DataProvider } from "@refinedev/core";
 type MethodTypes = "get" | "delete" | "head" | "options";
 type MethodTypesWithBody = "post" | "put" | "patch";
 
+import { convertPaginationToSkipLimit } from "./utils/paginate";
+import { transformResponse } from "./utils/response";
+
 export const dataProvider = (
   apiUrl: string,
   httpClient: AxiosInstance = axiosInstance
@@ -24,22 +27,14 @@ export const dataProvider = (
     const queryFilters = generateFilter(filters);
 
     const query: {
-      _start?: number;
-      _end?: number;
-      _sort?: string;
-      _order?: string;
+      skip?: number;
+      limit?: number;
     } = {};
 
     if (mode === "server") {
-      query._start = (current - 1) * pageSize;
-      query._end = current * pageSize;
-    }
-
-    const generatedSort = generateSort(sorters);
-    if (generatedSort) {
-      const { _sort, _order } = generatedSort;
-      query._sort = _sort.join(",");
-      query._order = _order.join(",");
+      const { skip, limit } = convertPaginationToSkipLimit(current, pageSize);
+      query.skip = skip;
+      query.limit = limit;
     }
 
     const combinedQuery = { ...query, ...queryFilters };
@@ -47,15 +42,15 @@ export const dataProvider = (
       ? `${url}?${stringify(combinedQuery)}`
       : url;
 
-    const { data, headers } = await httpClient[requestMethod](urlWithQuery, {
+    const { data } = await httpClient[requestMethod](urlWithQuery, {
       headers: headersFromMeta,
     });
 
-    const total = +headers["x-total-count"];
+    const { data: transformedData, total } = transformResponse(apiUrl, data);
 
     return {
-      data,
-      total: total || data.length,
+      data: transformedData,
+      total: total,
     };
   },
 
@@ -68,8 +63,10 @@ export const dataProvider = (
       { headers }
     );
 
+    const { data: transformedData } = transformResponse(apiUrl, data);
+
     return {
-      data,
+      data: transformedData,
     };
   },
 
@@ -83,8 +80,10 @@ export const dataProvider = (
       headers,
     });
 
+    const { data: transformedData } = transformResponse(apiUrl, data);
+
     return {
-      data,
+      data: transformedData,
     };
   },
 
@@ -98,8 +97,10 @@ export const dataProvider = (
       headers,
     });
 
+    const { data: transformedData } = transformResponse(apiUrl, data);
+
     return {
-      data,
+      data: transformedData,
     };
   },
 
@@ -111,8 +112,10 @@ export const dataProvider = (
 
     const { data } = await httpClient[requestMethod](url, { headers });
 
+    const { data: transformedData } = transformResponse(apiUrl, data);
+
     return {
-      data,
+      data: transformedData,
     };
   },
 
@@ -127,8 +130,10 @@ export const dataProvider = (
       headers,
     });
 
+    const { data: transformedData } = transformResponse(apiUrl, data);
+
     return {
-      data,
+      data: transformedData,
     };
   },
 

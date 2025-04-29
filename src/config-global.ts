@@ -29,6 +29,7 @@ export const API_URLS = {
   baseUrl: "https://api.fake-rest.refine.dev",
   meridianUrl: process.env.NEXT_PUBLIC_MERIDIAN_API_URL || "",
   heimdallUrl: process.env.NEXT_PUBLIC_HEIMDALL_API_URL || "",
-}
+  frostUrl: process.env.NEXT_PUBLIC_FROST_API_URL || "",
+};
 
 export const TENANT_ID = process.env.NEXT_PUBLIC_TENANT_ID || "";

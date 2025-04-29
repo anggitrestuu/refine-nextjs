@@ -1,17 +1,94 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { Box, Grid2 as Grid, Button } from '@mui/material';
 import AgentCard from './AgentCard';
-import { listAgents } from './data';
 import AgentSearch from './AgentSearch';
 import AgentFilter from './AgentFilter';
+import AgentSkeleton from './AgentSkeleton';
 import CustomBreadcrumbs from '@components/custom-breadcrumbs';
 import Iconify from '@components/iconify';
+import { AgentCreateDialog } from './AgentCreateDialog';
+import { useList, useModal } from '@refinedev/core';
+import { IAgent } from './type';
+import { debounce } from 'lodash';
+import EmptyContent from '@components/empty-content';
 
-interface AgentListProps {
-    agents: IAgent[];
-}
+const AgentGallery: React.FC = () => {
+    const { close: handleCloseCreateDialog, show: handleOpenCreateDialog, visible: createDialogOpen } = useModal()
+    const [searchQuery, setSearchQuery] = useState('');
 
-const AgentGallery: React.FC<AgentListProps> = ({ agents }) => {
+
+    const { data: dataAgents, isLoading } = useList<IAgent>({
+        dataProviderName: "meridian",
+        resource: "api/agents/list",
+        filters: [
+            {
+                field: "search",
+                operator: "eq",
+                value: searchQuery,
+            }
+        ]
+    })
+
+    // Debounced search handler
+    const debouncedSearch = useCallback(
+        debounce((query: string) => {
+            setSearchQuery(query);
+        }, 500),
+        []
+    );
+
+    const handleSearch = (query: string) => {
+        debouncedSearch(query);
+    };
+
+    const renderContent = () => {
+        if (isLoading) {
+            return (
+                <Grid container spacing={3}>
+                    {[...Array(6)].map((_, index) => (
+                        <Grid
+                            size={{
+                                xs: 12,
+                                sm: 6,
+                                lg: 4,
+                            }}
+                            key={`skeleton-${index}`}
+                        >
+                            <AgentSkeleton />
+                        </Grid>
+                    ))}
+                </Grid>
+            );
+        }
+
+        if (!dataAgents?.data?.length) {
+            return (
+                <EmptyContent
+                    title="No Agents Found"
+                    description={searchQuery ? "No agents match your search criteria" : "Start by creating your first agent"}
+                    img="/assets/illustrations/illustration_empty_content.svg"
+                />
+            );
+        }
+
+        return (
+            <Grid container spacing={3}>
+                {dataAgents.data.map(agent => (
+                    <Grid
+                        size={{
+                            xs: 12,
+                            sm: 6,
+                            lg: 4,
+                        }}
+                        key={agent.slug}
+                    >
+                        <AgentCard agent={agent} />
+                    </Grid>
+                ))}
+            </Grid>
+        );
+    };
+
     return (
         <>
             <Box sx={{
@@ -32,7 +109,7 @@ const AgentGallery: React.FC<AgentListProps> = ({ agents }) => {
                         <Button
                             variant="contained"
                             startIcon={<Iconify icon="eva:plus-fill" />}
-                            href="/app/agents/create"
+                            onClick={handleOpenCreateDialog}
                         >
                             Create Agent
                         </Button>
@@ -40,24 +117,15 @@ const AgentGallery: React.FC<AgentListProps> = ({ agents }) => {
                 />
 
                 <AgentFilter />
-                <AgentSearch onSearch={() => { /* handle search */ }} />
+                <AgentSearch onSearch={handleSearch} />
 
-                <Grid container spacing={3}>
-                    {listAgents.map(agent => (
-                        <Grid
-                            // item
-                            size={{
-                                xs: 12,
-                                sm: 6,
-                                lg: 4,
-                            }}
-                            key={agent.id}
-                        >
-                            <AgentCard agent={agent} />
-                        </Grid>
-                    ))}
-                </Grid>
+                {renderContent()}
             </Box>
+
+            <AgentCreateDialog
+                open={createDialogOpen}
+                onClose={handleCloseCreateDialog}
+            />
         </>
     );
 };

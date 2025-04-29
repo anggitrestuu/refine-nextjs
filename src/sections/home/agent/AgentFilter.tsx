@@ -1,6 +1,6 @@
 import { Box, Typography } from '@mui/material'
 import React from 'react'
-import { labelValueFilterAgents } from './data'
+import { labelValueFilterAgents } from './constants'
 
 
 
