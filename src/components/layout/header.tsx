@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import {
   useGetIdentity,
-  useActiveAuthProvider,
   pickNotDeprecated,
 } from "@refinedev/core";
 import { HamburgerMenu } from "./hamburgerMenu";
@@ -19,15 +18,18 @@ import SearchIcon from "@mui/icons-material/Search";
 import type { RefineThemedLayoutV2HeaderProps } from "@refinedev/mui";
 import { alpha } from "@mui/material";
 
+type IUser = {
+  id: number;
+  name: string;
+  avatar: string;
+};
+
 export const ThemedHeaderV2: React.FC<RefineThemedLayoutV2HeaderProps> = ({
   isSticky,
   sticky,
 }) => {
   const [scrolled, setScrolled] = useState(false);
-  const authProvider = useActiveAuthProvider();
-  const { data: user } = useGetIdentity({
-    v3LegacyAuthProviderCompatible: Boolean(authProvider?.isLegacy),
-  });
+  const { data: user } = useGetIdentity<IUser>();
 
   const prefferedSticky = pickNotDeprecated(sticky, isSticky) ?? true;
 

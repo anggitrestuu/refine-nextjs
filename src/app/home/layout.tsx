@@ -1,23 +1,24 @@
-import authOptions from "@app/api/auth/[...nextauth]/options";
-import { ThemedLayoutV2 } from "@components/layout";
+import { authProviderServer } from "@providers/auth-provider/auth-provider.server";
 import { AppLayout } from "@components/layout/AppLayout";
-import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 import React from "react";
 
 export default async function Layout({ children }: React.PropsWithChildren) {
   const data = await getData();
 
-  if (!data.session?.user) {
-    return redirect("/login");
+  if (!data.authenticated) {
+    return redirect(data?.redirectTo || "/login");
   }
 
   return <AppLayout>{children}</AppLayout>;
 }
 
 async function getData() {
-  const session = await getServerSession(authOptions);
+  const { authenticated, redirectTo } = await authProviderServer.check();
+
   return {
-    session,
+    authenticated,
+    redirectTo,
   };
 }
+

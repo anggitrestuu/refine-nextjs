@@ -1,18 +1,17 @@
 "use client";
 
-import { Refine, type AuthProvider } from "@refinedev/core";
+import { Refine } from "@refinedev/core";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 import {
   RefineSnackbarProvider,
   useNotificationProvider,
 } from "@refinedev/mui";
-import { SessionProvider, signIn, signOut, useSession } from "next-auth/react";
-import { usePathname } from "next/navigation";
 import React from "react";
 
 import routerProvider from "@refinedev/nextjs-router";
 
 import { dataProvider } from "@providers/rest-data-provider";
+import { authProvider } from "@providers/auth-provider/auth-provider.client";
 
 // scroll bar
 import "simplebar-react/dist/simplebar.min.css";
@@ -24,91 +23,14 @@ import ThemeProvider from "../theme";
 import { ThemeSettings, SettingsProvider } from "../components/settings";
 import { API_URLS } from "@config-global";
 
-type RefineContextProps = {
-  defaultMode?: string;
-};
 
 export const RefineContext = (
-  props: React.PropsWithChildren<RefineContextProps>
+  props: React.PropsWithChildren
 ) => {
-  return (
-    <SessionProvider>
-      <App {...props} />
-    </SessionProvider>
-  );
+  return <App {...props} />;
 };
 
-type AppProps = {
-  defaultMode?: string;
-};
-
-const App = (props: React.PropsWithChildren<AppProps>) => {
-  const { data, status } = useSession();
-  const to = usePathname();
-
-  if (status === "loading") {
-    return <span>loading...</span>;
-  }
-
-  const authProvider: AuthProvider = {
-    login: async () => {
-      signIn("auth0", {
-        callbackUrl: to ? to.toString() : "/",
-        redirect: true,
-      });
-
-      return {
-        success: true,
-      };
-    },
-    logout: async () => {
-      signOut({
-        redirect: true,
-        callbackUrl: "/login",
-      });
-
-      return {
-        success: true,
-      };
-    },
-    onError: async (error) => {
-      if (error.response?.status === 401) {
-        return {
-          logout: true,
-        };
-      }
-
-      return {
-        error,
-      };
-    },
-    check: async () => {
-      if (status === "unauthenticated") {
-        return {
-          authenticated: false,
-          redirectTo: "/login",
-        };
-      }
-
-      return {
-        authenticated: true,
-      };
-    },
-    getPermissions: async () => {
-      return null;
-    },
-    getIdentity: async () => {
-      if (data?.user) {
-        const { user } = data;
-        return {
-          name: user.name,
-          avatar: user.image,
-        };
-      }
-
-      return null;
-    },
-  };
+const App = (props: React.PropsWithChildren) => {
 
   return (
     <>
