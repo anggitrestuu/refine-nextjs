@@ -6,15 +6,17 @@ import MessageList from './MessageList';
 import ChatInput from './ChatInput';
 import { Message, AgentInfo } from './types';
 import { useAgentStore } from '@/hooks/useAgentStore';
-import { initiateAgentChat, createChatResponseEventSource, StreamChunk } from '@/services/chat-service';
+import { useWorkroomStore } from '@/hooks/useWorkroomStore';
+import { initiateAgentChat, initiateWorkroomChat, createChatResponseEventSource, StreamChunk } from '@/services/chat-service';
 
 const ChatWindow: React.FC = () => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const { selectedAgent } = useAgentStore();
+    const { selectedWorkroom } = useWorkroomStore();
     const eventSourceRef = useRef<EventSource | null>(null);
 
-    // Reset messages when agent changes
+    // Reset messages when agent or workroom changes
     useEffect(() => {
         if (selectedAgent) {
             setMessages([
@@ -22,6 +24,15 @@ const ChatWindow: React.FC = () => {
                     id: '1',
                     sender: 'ai',
                     text: `Hello! I'm ${selectedAgent.title}. How can I assist you today?`,
+                    timestamp: new Date(),
+                },
+            ]);
+        } else if (selectedWorkroom) {
+            setMessages([
+                {
+                    id: '1',
+                    sender: 'ai',
+                    text: `Welcome to ${selectedWorkroom.title} workroom. How can I assist you today?`,
                     timestamp: new Date(),
                 },
             ]);
@@ -35,7 +46,7 @@ const ChatWindow: React.FC = () => {
                 },
             ]);
         }
-    }, [selectedAgent]);
+    }, [selectedAgent, selectedWorkroom]);
 
     // Cleanup event source on unmount
     useEffect(() => {
@@ -47,8 +58,8 @@ const ChatWindow: React.FC = () => {
     }, []);
 
     const handleSend = async (text: string) => {
-        if (!selectedAgent?.slug) {
-            console.error("No agent selected");
+        if (!selectedAgent?.slug && !selectedWorkroom?.slug) {
+            console.error("No agent or workroom selected");
             return;
         }
 
@@ -74,8 +85,15 @@ const ChatWindow: React.FC = () => {
         setIsLoading(true);
 
         try {
-            // Initiate chat with the agent
-            const chatResponse = await initiateAgentChat(selectedAgent.slug, text);
+            // Initiate chat with the agent or workroom
+            let chatResponse;
+            if (selectedAgent?.slug) {
+                chatResponse = await initiateAgentChat(selectedAgent.slug, text);
+            } else if (selectedWorkroom?.slug) {
+                chatResponse = await initiateWorkroomChat(selectedWorkroom.slug, text);
+            } else {
+                throw new Error("No agent or workroom selected");
+            }
 
             // Close any existing event source
             if (eventSourceRef.current) {
@@ -158,8 +176,20 @@ const ChatWindow: React.FC = () => {
             }}
         >
             <ChatHeader
-                title={selectedAgent ? selectedAgent.title : "Default Chat"}
-                subtitle={selectedAgent ? selectedAgent.description : "Standard chat interface with a general-purpose AI assistant."}
+                title={
+                    selectedAgent
+                        ? selectedAgent.title
+                        : selectedWorkroom
+                            ? selectedWorkroom.title
+                            : "Default Chat"
+                }
+                subtitle={
+                    selectedAgent
+                        ? selectedAgent.description
+                        : selectedWorkroom
+                            ? selectedWorkroom.description
+                            : "Standard chat interface with a general-purpose AI assistant."
+                }
             />
             <MessageList messages={messages} />
             <ChatInput onSend={handleSend} disabled={isLoading} />

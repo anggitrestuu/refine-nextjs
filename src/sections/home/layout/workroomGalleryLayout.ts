@@ -14,7 +14,7 @@ const workroomGalleryLayout: FlexboxLayoutDefinition = {
       slotNumber: 2,
       width: "65%",
       component: {
-        componentId: "workroomGallery",
+        componentId: "workroom-gallery",
         title: "Workrooms",
       },
     },

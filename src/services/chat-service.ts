@@ -46,6 +46,28 @@ export const initiateAgentChat = async (
 };
 
 /**
+ * Initiates a chat with a workroom
+ * @param slug The workroom slug
+ * @param message The message to send
+ * @returns A promise that resolves to the chat response
+ */
+export const initiateWorkroomChat = async (
+  slug: string,
+  message: string
+): Promise<ChatResponse> => {
+  try {
+    const response = await axiosInstance.post<ChatResponse>(
+      `${API_URLS.meridianUrl}/api/chat/workroom/${slug}/`,
+      { message }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error initiating workroom chat:", error);
+    throw error;
+  }
+};
+
+/**
  * Creates an EventSource to listen for chat responses
  * @param taskId The task ID returned from initiating a chat
  * @param onChunk Callback function to handle incoming message chunks
