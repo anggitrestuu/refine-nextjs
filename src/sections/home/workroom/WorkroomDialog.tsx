@@ -14,11 +14,10 @@ import {
     Select,
     Chip,
     Box,
-    OutlinedInput,
-    SelectChangeEvent
+    OutlinedInput
 } from '@mui/material';
 import { useForm, Controller } from "react-hook-form";
-import { HttpError, useCreate, useUpdate, useOne, useNotification, useList } from "@refinedev/core";
+import { useOne, useNotification, useList } from "@refinedev/core";
 import { createWorkroom, updateWorkroom } from '@/services/workroom-service';
 import { IWorkroom } from './type';
 import { IAgent } from '../agent/type';
@@ -44,11 +43,15 @@ type IDataAgents = {
     }[]
 }
 
-type IDataTools = {
-    tools: {
-        title: string;
-        slug: string;
-    }[]
+
+type IDataTool = {
+    title: string;
+    slug: string;
+    description: string;
+    environments: {
+        key: string;
+        alias: string;
+    };
 }
 
 interface WorkroomDialogProps {
@@ -104,9 +107,7 @@ export const WorkroomDialog: React.FC<WorkroomDialogProps> = ({
         resource: "api/agents/list"
     })
 
-    console.log("dataAgents", dataAgents);
-
-    const { data: dataTools } = useOne<IDataTools>({
+    const { data: dataTools } = useList<IDataTool>({
         dataProviderName: "meridian",
         resource: "api/tools/list",
     });
@@ -308,7 +309,7 @@ export const WorkroomDialog: React.FC<WorkroomDialogProps> = ({
                                             field.onChange(newValue.join(','));
                                         }}
                                     >
-                                        {dataTools?.data?.tools?.map((tool) => (
+                                        {dataTools?.data?.map((tool) => (
                                             <MenuItem key={tool.slug} value={tool.slug}>
                                                 {tool.title}
                                             </MenuItem>
