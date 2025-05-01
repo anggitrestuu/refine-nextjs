@@ -4,7 +4,6 @@ import AgentCard from './AgentCard';
 import AgentSearch from './AgentSearch';
 import AgentFilter from './AgentFilter';
 import AgentSkeleton from './AgentSkeleton';
-import CustomBreadcrumbs from '@components/custom-breadcrumbs';
 import Iconify from '@components/iconify';
 import AgentDialog from './AgentDialog';
 import { useList, useModal } from '@refinedev/core';
@@ -150,20 +149,29 @@ const AgentGallery: React.FC = () => {
                 {renderContent()}
             </Box>
 
-            <AgentDialog
-                mode="create"
-                open={createDialogOpen}
-                onClose={handleCloseCreateDialog}
-                onSuccess={handleDialogSuccess}
-            />
+            {
+                createDialogOpen && (
+                    <AgentDialog
+                        mode="create"
+                        open={createDialogOpen}
+                        onClose={handleCloseCreateDialog}
+                        onSuccess={handleDialogSuccess}
+                    />
+                )
+            }
 
-            <AgentDialog
-                mode="edit"
-                open={editDialogOpen}
-                onClose={handleCloseEditDialog}
-                slug={selectedAgentSlug}
-                onSuccess={handleDialogSuccess}
-            />
+            {
+                editDialogOpen && (
+                    <AgentDialog
+                        mode="edit"
+                        open={editDialogOpen}
+                        onClose={handleCloseEditDialog}
+                        slug={selectedAgentSlug}
+                        onSuccess={handleDialogSuccess}
+                    />
+                )
+            }
+
         </>
     );
 };

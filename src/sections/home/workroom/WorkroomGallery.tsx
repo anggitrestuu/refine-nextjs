@@ -149,20 +149,27 @@ const WorkroomGallery: React.FC = () => {
                 {renderContent()}
             </Box>
 
-            <WorkroomDialog
-                mode="create"
-                open={createDialogOpen}
-                onClose={handleCloseCreateDialog}
-                onSuccess={handleDialogSuccess}
-            />
-
-            <WorkroomDialog
-                mode="edit"
-                open={editDialogOpen}
-                onClose={handleCloseEditDialog}
-                workroomSlug={selectedWorkroomSlug}
-                onSuccess={handleDialogSuccess}
-            />
+            {
+                createDialogOpen && (
+                    <WorkroomDialog
+                        mode="create"
+                        open={createDialogOpen}
+                        onClose={handleCloseCreateDialog}
+                        onSuccess={handleDialogSuccess}
+                    />
+                )
+            }
+            {
+                editDialogOpen && (
+                    <WorkroomDialog
+                        mode="edit"
+                        open={editDialogOpen}
+                        onClose={handleCloseEditDialog}
+                        workroomSlug={selectedWorkroomSlug}
+                        onSuccess={handleDialogSuccess}
+                    />
+                )
+            }
         </>
     );
 };
