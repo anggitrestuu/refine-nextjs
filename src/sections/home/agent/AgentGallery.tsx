@@ -11,10 +11,15 @@ import { useList, useModal } from '@refinedev/core';
 import { IAgent } from './type';
 import { debounce } from 'lodash';
 import EmptyContent from '@components/empty-content';
+import LayoutBreadcrumbs from '@components/layout-breadcrumbs/LayoutBreadcrumbs';
+import mainPageLayout from '../layout/mainPageLayout';
+import aiGalleryLayout from '../layout/aiGalleryLayout';
+import { useLayoutStore } from '@hooks/useLayoutStore';
 
 const AgentGallery: React.FC = () => {
     const { close: handleCloseCreateDialog, show: handleOpenCreateDialog, visible: createDialogOpen } = useModal()
     const [searchQuery, setSearchQuery] = useState('');
+    const { switchToLayout } = useLayoutStore();
 
 
     const { data: dataAgents, isLoading } = useList<IAgent>({
@@ -94,17 +99,19 @@ const AgentGallery: React.FC = () => {
             <Box sx={{
                 p: 2,
             }}>
-                <CustomBreadcrumbs
-                    heading="Agents"
+                <LayoutBreadcrumbs
+                    sx={{
+                        bgcolor: "background.surface",
+                        borderRadius: 2,
+                        p: 2,
+                        mb: 2
+                    }}
+                    heading="AI Agents"
                     links={[
-                        {
-                            name: 'Home',
-                            href: '/app/home',
-                        },
-                        {
-                            name: 'Agents',
-                        },
+                        { name: 'Home', href: '/home', layout: mainPageLayout },
+                        { name: 'AI Agents', href: '/ai-gallery', layout: aiGalleryLayout },
                     ]}
+                    switchToLayout={switchToLayout}
                     action={
                         <Button
                             variant="contained"

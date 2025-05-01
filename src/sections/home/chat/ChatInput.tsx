@@ -53,7 +53,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSend, disabled = false }) => {
                 InputProps={{
                     sx: {
                         borderRadius: 1.5,
-                        bgcolor: disabled ? 'action.disabledBackground' : 'primary.lighter',
+                        bgcolor: disabled ? 'action.disabledBackground' : 'background.surface',
                         borderColor: 'border.main'
                     }
                 }}

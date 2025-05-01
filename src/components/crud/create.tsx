@@ -71,9 +71,9 @@ export const Create: React.FC<Props> = ({
         `${identifier}.titles.list`,
         getUserFriendlyName(
           resource?.meta?.label ??
-            resource?.options?.label ??
-            resource?.label ??
-            identifier,
+          resource?.options?.label ??
+          resource?.label ??
+          identifier,
           "plural"
         )
       )
@@ -151,9 +151,9 @@ export const Create: React.FC<Props> = ({
           {footerButtons
             ? typeof footerButtons === "function"
               ? footerButtons({
-                  defaultButtons: defaultFooterButtons,
-                  saveButtonProps,
-                })
+                defaultButtons: defaultFooterButtons,
+                saveButtonProps,
+              })
               : footerButtons
             : defaultFooterButtons}
         </CardActions>
