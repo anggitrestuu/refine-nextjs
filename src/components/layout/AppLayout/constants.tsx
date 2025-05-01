@@ -36,7 +36,7 @@ export const FOOTER_NAV_ITEMS: NavItem[] = [
   {
     href: '/app/profile',
     title: 'Profile',
-    icon: null, // Will use UserProfileBadge instead
+    icon: <Iconify icon="eva:person-fill" />,
     ariaLabel: 'View your profile',
     isProfile: true,
   },
