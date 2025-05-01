@@ -1,19 +1,39 @@
 // src/features/agent/components/AgentCard.tsx
 import React from 'react';
-import { Card, CardContent, Typography, Box, Stack, Chip } from '@mui/material';
+import { Card, CardContent, Typography, Box, Stack, Chip, Button } from '@mui/material';
 import { IAgent } from './type';
+import ChatIcon from '@mui/icons-material/Chat';
+import { useAgentStore } from '@/hooks/useAgentStore';
 
 interface AgentCardProps {
     agent: IAgent;
 }
 
 const AgentCard: React.FC<AgentCardProps> = ({ agent }) => {
+    const { selectAgent } = useAgentStore();
+
+    const handleChatClick = () => {
+        // Select this agent in the store
+        selectAgent(agent);
+
+        // Scroll to the chat window if needed
+        const chatContainer = document.getElementById('chat-container');
+        if (chatContainer) {
+            chatContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
     return (
         <Card variant="outlined" sx={{
             bgcolor: "background.surface",
             height: '100%',
             display: 'flex',
-            flexDirection: 'column'
+            flexDirection: 'column',
+            transition: 'transform 0.2s, box-shadow 0.2s',
+            '&:hover': {
+                boxShadow: '0 4px 20px 0 rgba(0,0,0,0.12)',
+                transform: 'translateY(-4px)',
+            }
         }}>
             <CardContent sx={{
                 flex: 1,
@@ -42,7 +62,6 @@ const AgentCard: React.FC<AgentCardProps> = ({ agent }) => {
                             fontWeight: 'bold'
                         }}
                     />
-
                 </Stack>
 
                 <Box sx={{ flex: 1 }}>
@@ -62,22 +81,17 @@ const AgentCard: React.FC<AgentCardProps> = ({ agent }) => {
                             {agent.description}
                         </Typography>
                     )}
-
-                    {/* {agent.systemPrompt && (
-                        <Typography
-                            variant="body2"
-                            color='text.secondary'
-                            sx={{
-                                display: '-webkit-box',
-                                WebkitLineClamp: 3,
-                                WebkitBoxOrient: 'vertical',
-                                overflow: 'hidden'
-                            }}
-                        >
-                            {agent.systemPrompt}
-                        </Typography>
-                    )} */}
                 </Box>
+
+                <Button
+                    variant="contained"
+                    color="primary"
+                    startIcon={<ChatIcon />}
+                    onClick={handleChatClick}
+                    sx={{ mt: 2, alignSelf: 'flex-start' }}
+                >
+                    Chat with Agent
+                </Button>
             </CardContent>
         </Card>
     );

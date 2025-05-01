@@ -6,8 +6,13 @@ import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography, Button, keyframes } from '@mui/material';
 import 'katex/dist/katex.min.css';
+
+const blinkAnimation = keyframes`
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+`;
 
 interface MarkdownMessageProps {
   content: string;
@@ -189,9 +194,9 @@ export const MarkdownMessage = memo(
               display: 'inline-block',
               width: '0.5rem',
               height: '1rem',
-              bgcolor: 'current',
+              bgcolor: 'text.primary',
               ml: 0.5,
-              animation: 'pulse 1s infinite',
+              animation: `${blinkAnimation} 1s infinite`,
             }}
           />
         )}

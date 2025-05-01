@@ -1,24 +1,25 @@
 // src/components/Chat/ChatInput.tsx
 import React, { useState } from 'react';
-import { Box, TextField, IconButton } from '@mui/material';
+import { Box, TextField, IconButton, CircularProgress } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 
 interface ChatInputProps {
     onSend: (text: string) => void;
+    disabled?: boolean;
 }
 
-const ChatInput: React.FC<ChatInputProps> = ({ onSend }) => {
+const ChatInput: React.FC<ChatInputProps> = ({ onSend, disabled = false }) => {
     const [text, setText] = useState('');
 
     const handleSend = () => {
         const trimmed = text.trim();
-        if (!trimmed) return;
+        if (!trimmed || disabled) return;
         onSend(trimmed);
         setText('');
     };
 
     const onKeyPress = (e: React.KeyboardEvent) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
+        if (e.key === 'Enter' && !e.shiftKey && !disabled) {
             e.preventDefault();
             handleSend();
         }
@@ -48,10 +49,22 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSend }) => {
                 maxRows={4}
                 variant="outlined"
                 fullWidth
-                InputProps={{ sx: { borderRadius: 1.5, bgcolor: 'primary.lighter', borderColor: 'border.main' } }}
+                disabled={disabled}
+                InputProps={{
+                    sx: {
+                        borderRadius: 1.5,
+                        bgcolor: disabled ? 'action.disabledBackground' : 'primary.lighter',
+                        borderColor: 'border.main'
+                    }
+                }}
             />
-            <IconButton type="submit" sx={{ ml: 1 }} color="primary">
-                <SendIcon />
+            <IconButton
+                type="submit"
+                sx={{ ml: 1 }}
+                color="primary"
+                disabled={disabled || !text.trim()}
+            >
+                {disabled ? <CircularProgress size={24} /> : <SendIcon />}
             </IconButton>
         </Box>
     );
