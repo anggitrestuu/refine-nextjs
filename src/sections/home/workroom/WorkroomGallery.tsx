@@ -6,7 +6,7 @@ import WorkroomFilter from './WorkroomFilter';
 import WorkroomSkeleton from './WorkroomSkeleton';
 import Iconify from '@components/iconify';
 import { WorkroomDialog } from './WorkroomDialog';
-import { useList, useModal } from '@refinedev/core';
+import { useCreate, useList, useModal } from '@refinedev/core';
 import { IWorkroom } from './type';
 import { debounce } from 'lodash';
 import EmptyContent from '@components/empty-content';
@@ -19,8 +19,9 @@ const WorkroomGallery: React.FC = () => {
     const { close: handleCloseCreateDialog, show: handleOpenCreateDialog, visible: createDialogOpen } = useModal();
     const { close: handleCloseEditDialog, show: handleOpenEditDialog, visible: editDialogOpen } = useModal();
     const [searchQuery, setSearchQuery] = useState('');
-    const [selectedWorkroom, setSelectedWorkroom] = useState<IWorkroom | undefined>(undefined);
+    const [selectedWorkroomSlug, setSelectedWorkroomSlug] = useState<string | undefined>(undefined);
     const { switchToLayout } = useLayoutStore();
+    const { } = useCreate({});
 
     const { data: dataWorkrooms, isLoading, refetch } = useList<IWorkroom>({
         dataProviderName: "meridian",
@@ -47,7 +48,7 @@ const WorkroomGallery: React.FC = () => {
     };
 
     const handleEditWorkroom = (workroom: IWorkroom) => {
-        setSelectedWorkroom(workroom);
+        setSelectedWorkroomSlug(workroom.slug);
         handleOpenEditDialog();
     };
 
@@ -159,7 +160,7 @@ const WorkroomGallery: React.FC = () => {
                 mode="edit"
                 open={editDialogOpen}
                 onClose={handleCloseEditDialog}
-                initialData={selectedWorkroom}
+                workroomSlug={selectedWorkroomSlug}
                 onSuccess={handleDialogSuccess}
             />
         </>
