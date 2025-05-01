@@ -339,43 +339,6 @@ export const WorkroomDialog: React.FC<WorkroomDialogProps> = ({
                                     </FormControl>
                                 )}
                             />
-
-                            {/* 
-                            <Controller
-                                name="canvases"
-                                control={control}
-                                render={({ field }) => (
-                                    <FormControl fullWidth error={!!errors.canvases}>
-                                        <InputLabel>Canvases</InputLabel>
-                                        <Select
-                                            multiple
-                                            value={field.value ? field.value.split(',').filter(Boolean) : []}
-                                            input={<OutlinedInput label="Canvases" />}
-                                            renderValue={(selected) => (
-                                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                                    {selected.map((value) => (
-                                                        <Chip key={value} label={value} />
-                                                    ))}
-                                                </Box>
-                                            )}
-                                            onChange={(e) => {
-                                                const newValue = e.target.value as string[];
-                                                field.onChange(newValue.join(','));
-                                            }}
-                                        >
-                                            {dataCanvases?.data?.canvases?.map((canvas) => (
-                                                <MenuItem key={canvas} value={canvas}>
-                                                    {canvas}
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                        {errors.canvases && (
-                                            <FormHelperText>{errors.canvases.message}</FormHelperText>
-                                        )}
-                                    </FormControl>
-                                )}
-                            />
-                            */}
                         </Stack>
                     )}
                 </DialogContent>

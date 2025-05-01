@@ -17,12 +17,14 @@ import aiGalleryLayout from '../layout/aiGalleryLayout';
 import { useLayoutStore } from '@hooks/useLayoutStore';
 
 const AgentGallery: React.FC = () => {
-    const { close: handleCloseCreateDialog, show: handleOpenCreateDialog, visible: createDialogOpen } = useModal()
+    const { close: handleCloseCreateDialog, show: handleOpenCreateDialog, visible: createDialogOpen } = useModal();
+    const { close: handleCloseEditDialog, show: handleOpenEditDialog, visible: editDialogOpen } = useModal();
     const [searchQuery, setSearchQuery] = useState('');
+    const [selectedAgentSlug, setSelectedAgentSlug] = useState<string | undefined>(undefined);
     const { switchToLayout } = useLayoutStore();
 
 
-    const { data: dataAgents, isLoading } = useList<IAgent>({
+    const { data: dataAgents, isLoading, refetch } = useList<IAgent>({
         dataProviderName: "meridian",
         resource: "api/agents/list",
         filters: [
@@ -32,7 +34,7 @@ const AgentGallery: React.FC = () => {
                 value: searchQuery,
             }
         ]
-    })
+    });
 
     // Debounced search handler
     const debouncedSearch = useCallback(
@@ -44,6 +46,21 @@ const AgentGallery: React.FC = () => {
 
     const handleSearch = (query: string) => {
         debouncedSearch(query);
+    };
+
+    const handleEditAgent = (agent: IAgent) => {
+        setSelectedAgentSlug(agent.slug);
+        handleOpenEditDialog();
+    };
+
+    const handleDeleteAgent = (slug: string) => {
+        // Refetch the list after deletion
+        refetch();
+    };
+
+    const handleDialogSuccess = () => {
+        // Refetch the list after create/edit
+        refetch();
     };
 
     const renderContent = () => {
@@ -87,7 +104,11 @@ const AgentGallery: React.FC = () => {
                         }}
                         key={agent.slug}
                     >
-                        <AgentCard agent={agent} />
+                        <AgentCard
+                            agent={agent}
+                            onEdit={handleEditAgent}
+                            onDelete={handleDeleteAgent}
+                        />
                     </Grid>
                 ))}
             </Grid>
@@ -133,6 +154,15 @@ const AgentGallery: React.FC = () => {
                 mode="create"
                 open={createDialogOpen}
                 onClose={handleCloseCreateDialog}
+                onSuccess={handleDialogSuccess}
+            />
+
+            <AgentDialog
+                mode="edit"
+                open={editDialogOpen}
+                onClose={handleCloseEditDialog}
+                slug={selectedAgentSlug}
+                onSuccess={handleDialogSuccess}
             />
         </>
     );
