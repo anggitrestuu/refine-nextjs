@@ -7,6 +7,7 @@ import OptionButton from './OptionButton';
 import aiGalleryLayout from '../layout/aiGalleryLayout';
 import mainPageLayout from '../layout/mainPageLayout';
 import { useLayoutStore } from '@/hooks/useLayoutStore';
+import workroomGalleryLayout from '../layout/workroomGalleryLayout';
 
 export interface QuickOption {
     icon: React.ReactNode;
@@ -29,15 +30,14 @@ const QuickOptions: React.FC = () => {
             icon: <HomeIcon fontSize="large" />,
             label: 'Workroom',
             onClick: () => {
-                switchToLayout(mainPageLayout);
+                switchToLayout(workroomGalleryLayout);
             },
         },
         {
             icon: <GroupIcon fontSize="large" />,
             label: 'Organization',
             onClick: () => {
-                // Tambahkan layout untuk Organization jika ada
-                console.log('Organization clicked');
+                switchToLayout(mainPageLayout);
             },
         },
     ];
